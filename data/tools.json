@@ -1,0 +1,172 @@
+{
+    "ai": [
+        {
+            "name": "Claude",
+            "description": "Anthropic's flagship AI. Best for complex coding tasks and detailed explanations. The vibecoder's favorite.",
+            "url": "https://claude.ai",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/anthropic.svg",
+            "tags": [
+                "AI Assistant",
+                "Best for Vibecoding"
+            ]
+        },
+        {
+            "name": "ChatGPT",
+            "description": "OpenAI's conversational AI. Great all-rounder with vast knowledge and code generation.",
+            "url": "https://chat.openai.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg",
+            "tags": [
+                "AI Assistant",
+                "Most Popular"
+            ]
+        },
+        {
+            "name": "Gemini",
+            "description": "Google's AI with deep integration into Google services. Free and powerful.",
+            "url": "https://gemini.google.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/googlegemini.svg",
+            "tags": [
+                "AI Assistant",
+                "Free",
+                "Google"
+            ]
+        }
+    ],
+    "nocode": [
+        {
+            "name": "Cursor",
+            "description": "AI-first code editor. Describe what you want, Cursor writes the code. The #1 tool for vibecoders.",
+            "url": "https://cursor.sh",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/cursor.svg",
+            "tags": [
+                "Editor",
+                "Must Have",
+                "Best for Vibecoding"
+            ]
+        },
+        {
+            "name": "Bolt.new",
+            "description": "Full-stack app generator. Describe your app in plain English, get a working project instantly.",
+            "url": "https://bolt.new",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/stackblitz.svg",
+            "tags": [
+                "Full-stack",
+                "No Setup",
+                "Instant"
+            ]
+        },
+        {
+            "name": "v0.dev",
+            "description": "Vercel's AI that generates React components from text. Perfect for UI design.",
+            "url": "https://v0.dev",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg",
+            "tags": [
+                "UI Generator",
+                "React",
+                "By Vercel"
+            ]
+        },
+        {
+            "name": "Lovable",
+            "description": "Build apps through conversation. AI handles all technical details for you.",
+            "url": "https://lovable.dev",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/heart.svg",
+            "tags": [
+                "No-Code",
+                "Beginner Friendly"
+            ]
+        },
+        {
+            "name": "Replit",
+            "description": "Browser-based IDE with AI. Code, run, and deploy from anywhere without setup.",
+            "url": "https://replit.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/replit.svg",
+            "tags": [
+                "Cloud IDE",
+                "AI Agent",
+                "Deploy"
+            ]
+        },
+        {
+            "name": "Windsurf",
+            "description": "AI-powered IDE by Codeium. Great free alternative to Cursor.",
+            "url": "https://codeium.com/windsurf",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/codeium.svg",
+            "tags": [
+                "Editor",
+                "Free",
+                "AI Agent"
+            ]
+        }
+    ],
+    "backend": [
+        {
+            "name": "Supabase",
+            "description": "Database, auth, and storage in one. No backend coding needed - just connect and use.",
+            "url": "https://supabase.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/supabase.svg",
+            "tags": [
+                "Database",
+                "Auth",
+                "No Backend Code"
+            ]
+        },
+        {
+            "name": "Firebase",
+            "description": "Google's app platform. Realtime database, auth, hosting - all without writing backend.",
+            "url": "https://firebase.google.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/firebase.svg",
+            "tags": [
+                "Google",
+                "Realtime",
+                "All-in-One"
+            ]
+        },
+        {
+            "name": "Convex",
+            "description": "Modern backend for vibecoders. Realtime sync that just works.",
+            "url": "https://convex.dev",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/convex.svg",
+            "tags": [
+                "Realtime",
+                "TypeScript",
+                "Easy"
+            ]
+        }
+    ],
+    "hosting": [
+        {
+            "name": "Vercel",
+            "description": "One-click deploy from GitHub. Your app is live in seconds with free SSL.",
+            "url": "https://vercel.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg",
+            "tags": [
+                "Deploy",
+                "Free Tier",
+                "Automatic"
+            ]
+        },
+        {
+            "name": "Netlify",
+            "description": "Drop your folder, site is live. Perfect for static sites and simple apps.",
+            "url": "https://netlify.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/netlify.svg",
+            "tags": [
+                "Deploy",
+                "Drag & Drop",
+                "Free"
+            ]
+        },
+        {
+            "name": "GitHub Pages",
+            "description": "Free hosting directly from your GitHub repo. Great for simple projects.",
+            "url": "https://pages.github.com",
+            "logo": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/github.svg",
+            "tags": [
+                "Free",
+                "GitHub",
+                "Static Sites"
+            ]
+        }
+    ]
+}

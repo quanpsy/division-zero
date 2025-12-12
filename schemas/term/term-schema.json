@@ -1,0 +1,45 @@
+{
+    "_schema_version": "1.0",
+    "_description": "Dictionary term data schema - for vibecoder vocabulary",
+    "term": {
+        "// ============================================": "",
+        "// CORE FIELDS": "",
+        "// ============================================": "",
+        "id": "unique-term-id",
+        "name": "Term Name",
+        "icon": "🔧",
+        "category": "UI/UX | Backend | Features | Concepts | AI | Deployment",
+        "definition": "Clear, beginner-friendly explanation (2-3 sentences max)",
+        "useCase": "When you would use this in a real project",
+        "example": "Brief real-world example",
+        "// ============================================": "",
+        "// AI PROMPT (the key feature)": "",
+        "// ============================================": "",
+        "prompt": "The AI prompt vibecoders can copy to implement this feature",
+        "// ============================================": "",
+        "// OPTIONAL FIELDS": "",
+        "// ============================================": "",
+        "related": [
+            "related-term-1",
+            "related-term-2"
+        ],
+        "difficulty": "beginner | intermediate | advanced",
+        "tags": [
+            "tag1",
+            "tag2"
+        ]
+    },
+    "_field_notes": {
+        "id": "URL-safe slug, auto-generated from name",
+        "name": "Human-readable term name",
+        "icon": "Single emoji representing the term",
+        "category": "Which category this term belongs to",
+        "definition": "Short, clear explanation for beginners",
+        "useCase": "Practical use case, when to use this",
+        "example": "Real-world example of the term in action",
+        "prompt": "Copy-pasteable AI prompt to implement this feature",
+        "related": "Array of related term IDs for cross-referencing",
+        "difficulty": "Skill level needed to understand/implement",
+        "tags": "Additional tags for search/filtering"
+    }
+}

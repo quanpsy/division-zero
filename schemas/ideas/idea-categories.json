@@ -1,0 +1,194 @@
+{
+    "_description": "Categories and options for idea submissions",
+    "_last_updated": "2024-12-11",
+    "idea_types": [
+        {
+            "id": "validation",
+            "name": "Validation (Free)",
+            "icon": "🔍",
+            "description": "Get community feedback on your idea's feasibility",
+            "webhook": "VALIDATION_WEBHOOK_URL",
+            "flow": "Community validates → Discussion thread → Feedback"
+        },
+        {
+            "id": "paid",
+            "name": "Paid Commission",
+            "icon": "💰",
+            "description": "Pay to have your idea built by a vibecoder",
+            "webhook": "PAID_IDEA_WEBHOOK_URL",
+            "flow": "Submit → Owner validates → Builder assigned → You pay → Built"
+        }
+    ],
+    "categories": [
+        {
+            "id": "app",
+            "name": "App",
+            "icon": "📱",
+            "description": "Mobile or web application"
+        },
+        {
+            "id": "game",
+            "name": "Game",
+            "icon": "🎮",
+            "description": "Browser game, mobile game, or desktop game"
+        },
+        {
+            "id": "tool",
+            "name": "Tool",
+            "icon": "🛠️",
+            "description": "Utility or productivity tool"
+        },
+        {
+            "id": "website",
+            "name": "Website",
+            "icon": "🌐",
+            "description": "Landing page, portfolio, or informational site"
+        },
+        {
+            "id": "extension",
+            "name": "Extension",
+            "icon": "🧩",
+            "description": "Browser extension or plugin"
+        },
+        {
+            "id": "bot",
+            "name": "Bot",
+            "icon": "🤖",
+            "description": "Discord bot, Telegram bot, or automation"
+        },
+        {
+            "id": "other",
+            "name": "Other",
+            "icon": "💡",
+            "description": "Something else entirely"
+        }
+    ],
+    "budget_ranges": [
+        {
+            "id": "under-100",
+            "name": "Under $100",
+            "min": 0,
+            "max": 100
+        },
+        {
+            "id": "100-500",
+            "name": "$100-500",
+            "min": 100,
+            "max": 500
+        },
+        {
+            "id": "500-1000",
+            "name": "$500-1000",
+            "min": 500,
+            "max": 1000
+        },
+        {
+            "id": "1000-5000",
+            "name": "$1000-5000",
+            "min": 1000,
+            "max": 5000
+        },
+        {
+            "id": "5000-plus",
+            "name": "$5000+",
+            "min": 5000,
+            "max": null
+        }
+    ],
+    "timelines": [
+        {
+            "id": "asap",
+            "name": "ASAP",
+            "description": "Need it as soon as possible"
+        },
+        {
+            "id": "1-2-weeks",
+            "name": "1-2 weeks",
+            "description": "Within the next couple weeks"
+        },
+        {
+            "id": "1-month",
+            "name": "1 month",
+            "description": "Within a month"
+        },
+        {
+            "id": "flexible",
+            "name": "Flexible",
+            "description": "No rush, quality over speed"
+        }
+    ],
+    "validation_statuses": [
+        {
+            "id": "pending",
+            "name": "Pending",
+            "icon": "⏳"
+        },
+        {
+            "id": "in_discussion",
+            "name": "In Discussion",
+            "icon": "💬"
+        },
+        {
+            "id": "validated",
+            "name": "Validated",
+            "icon": "✅"
+        },
+        {
+            "id": "not_feasible",
+            "name": "Not Feasible",
+            "icon": "❌"
+        },
+        {
+            "id": "needs_more_info",
+            "name": "Needs More Info",
+            "icon": "❓"
+        }
+    ],
+    "paid_statuses": [
+        {
+            "id": "new",
+            "name": "New",
+            "icon": "🆕"
+        },
+        {
+            "id": "contacted",
+            "name": "Contacted",
+            "icon": "📧"
+        },
+        {
+            "id": "negotiating",
+            "name": "Negotiating",
+            "icon": "🤝"
+        },
+        {
+            "id": "confirmed",
+            "name": "Confirmed",
+            "icon": "✅"
+        },
+        {
+            "id": "assigned",
+            "name": "Assigned",
+            "icon": "👷"
+        },
+        {
+            "id": "in_progress",
+            "name": "In Progress",
+            "icon": "🔨"
+        },
+        {
+            "id": "completed",
+            "name": "Completed",
+            "icon": "🎉"
+        },
+        {
+            "id": "cancelled",
+            "name": "Cancelled",
+            "icon": "🚫"
+        }
+    ],
+    "_payment_model": {
+        "builder_share": 0.85,
+        "platform_share": 0.15,
+        "note": "Builder gets 85%, platform keeps 15% commission"
+    }
+}

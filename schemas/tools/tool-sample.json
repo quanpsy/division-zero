@@ -1,0 +1,15 @@
+{
+    "_description": "Sample tool entry - Antigravity (top pick!)",
+    "tool": {
+        "id": "antigravity",
+        "name": "Antigravity",
+        "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg",
+        "website": "https://antigravity.dev",
+        "description": "AI-native IDE. The future of coding. Our top pick for vibecoders.",
+        "category": "code_editors",
+        "difficulty": 4,
+        "capability": 10,
+        "free_tier": true,
+        "no_code_friendly": false
+    }
+}

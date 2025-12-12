@@ -1,0 +1,133 @@
+{
+    "_schema_version": "1.2",
+    "_description": "Complete project data schema organized by data source",
+    "project": {
+        "// ============================================": "",
+        "// SECTION 1: USER SUBMITTED (via form)": "",
+        "// ============================================": "",
+        "name": "Project Name",
+        "description": "Short description of what the app does",
+        "category": "Productivity | Developer Tools | Design | Games | AI Agents | Utilities | Other",
+        "builder": {
+            "name": "Builder's Name",
+            "discord": "@username",
+            "profileUrl": "https://linkedin.com/in/... or personal website",
+            "github": "https://github.com/username"
+        },
+        "originalUrl": "https://their-app.vercel.app",
+        "githubRepo": "https://github.com/user/repo",
+        "logo": "https://... or uploaded file path",
+        "tools": [
+            "Claude",
+            "Cursor",
+            "Bolt.new"
+        ],
+        "tags": [
+            "React",
+            "Next.js",
+            "Supabase"
+        ],
+        "isCompletelyPaid": false,
+        "_isCompletelyPaid_note": "User declares if project was built entirely using paid tools (no free tier usage)",
+        "// ============================================": "",
+        "// SECTION 2: MODERATOR ADDED (via Discord)": "",
+        "// ============================================": "",
+        "status": "pending | approved | rejected | archived",
+        "isDivisionZero": false,
+        "_isDivisionZero_note": "If true, project ALSO shows in Division Zero carousel at bottom (bonus placement)",
+        "featured": false,
+        "promoted": false,
+        "verified": false,
+        "moderatorNotes": "Internal notes for team",
+        "approvedBy": "moderator_discord_id",
+        "lastModeratedAt": "2024-12-11T00:00:00Z",
+        "lastModeratedBy": "moderator_discord_id",
+        "// ============================================": "",
+        "// SECTION 3: BOT/WORKER GENERATED (automated)": "",
+        "// ============================================": "",
+        "id": "auto-generated-unique-id",
+        "slug": "project-name-slug",
+        "proxyUrl": "https://projectname.divisionzero.dev",
+        "discordThread": "https://discord.com/channels/.../...",
+        "discordMessageId": "message_id_for_bot_updates",
+        "dates": {
+            "submitted": "2024-12-11T00:00:00Z",
+            "approved": "2024-12-11T00:00:00Z",
+            "lastUpdated": "2024-12-11T00:00:00Z"
+        },
+        "// ============================================": "",
+        "// SECTION 4: ALGORITHM GENERATED (analytics/ranking)": "",
+        "// ============================================": "",
+        "analytics": {
+            "totalViews": 0,
+            "viewsToday": 0,
+            "viewsThisWeek": 0,
+            "viewsThisMonth": 0,
+            "uniqueVisitors": 0,
+            "clicks": 0,
+            "saves": 0
+        },
+        "ranking": {
+            "trendingScore": 0,
+            "popularityScore": 0,
+            "newScore": 0,
+            "overallRank": 0,
+            "categoryRank": 0
+        },
+        "slot": "trending | new | category | featured | none",
+        "_slot_note": "Algorithm assigns ONE slot. All projects follow same rule.",
+        "sortOrder": 0
+    },
+    "_display_rules": {
+        "all_projects": "Every project appears in ONLY ONE main slot (trending/new/category/featured)",
+        "division_zero_bonus": "If isDivisionZero: true, project ALSO appears in Division Zero carousel at bottom",
+        "example": "A DZ project ranked #1 trending shows in: Trending carousel + Division Zero carousel"
+    },
+    "_discord_moderation": {
+        "commands": [
+            "!approve <id> - Approve project",
+            "!reject <id> - Reject project",
+            "!feature <id> - Toggle featured status",
+            "!dz <id> - Toggle Division Zero status",
+            "!notes <id> <text> - Add moderator notes"
+        ]
+    },
+    "_section_summary": {
+        "section_1_form": [
+            "name",
+            "description",
+            "category",
+            "builder.*",
+            "originalUrl",
+            "githubRepo",
+            "logo",
+            "tools",
+            "tags"
+        ],
+        "section_2_moderator": [
+            "status",
+            "isDivisionZero",
+            "featured",
+            "promoted",
+            "verified",
+            "moderatorNotes",
+            "approvedBy",
+            "lastModeratedAt",
+            "lastModeratedBy"
+        ],
+        "section_3_bot": [
+            "id",
+            "slug",
+            "proxyUrl",
+            "discordThread",
+            "discordMessageId",
+            "dates.*"
+        ],
+        "section_4_algorithm": [
+            "analytics.*",
+            "ranking.*",
+            "slot",
+            "sortOrder"
+        ]
+    }
+}

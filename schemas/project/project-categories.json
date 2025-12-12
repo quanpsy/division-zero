@@ -1,0 +1,106 @@
+{
+    "_description": "Categories and carousels for Division Zero projects page",
+    "// ============================================": "",
+    "// CAROUSELS - Display order on Projects page": "",
+    "// Each shows 10 projects": "",
+    "// ============================================": "",
+    "carousels": [
+        {
+            "id": "trending",
+            "name": "Top 10 Trending",
+            "icon": "🔥",
+            "count": 10,
+            "rules": "Top 10 by trendingScore this week"
+        },
+        {
+            "id": "featured",
+            "name": "Featured",
+            "icon": "⭐",
+            "count": 10,
+            "rules": "Hand-picked by moderators (featured: true)"
+        },
+        {
+            "id": "new",
+            "name": "New",
+            "icon": "✨",
+            "count": 10,
+            "rules": "Most recently approved, last 7 days"
+        },
+        {
+            "id": "top-rated",
+            "name": "Top Rated",
+            "icon": "🏆",
+            "count": 10,
+            "rules": "Top 10 by popularityScore all time"
+        },
+        {
+            "id": "games",
+            "name": "Games",
+            "icon": "🎮",
+            "count": 10,
+            "rules": "Top 10 games by popularityScore"
+        },
+        {
+            "id": "division-zero",
+            "name": "Division Zero",
+            "icon": "🏠",
+            "count": 10,
+            "rules": "Projects with isDivisionZero: true"
+        }
+    ],
+    "// ============================================": "",
+    "// PROJECT CATEGORIES (for form dropdown)": "",
+    "// ============================================": "",
+    "projectCategories": [
+        {
+            "id": "productivity",
+            "name": "Productivity",
+            "icon": "📋"
+        },
+        {
+            "id": "developer-tools",
+            "name": "Developer Tools",
+            "icon": "🛠️"
+        },
+        {
+            "id": "design",
+            "name": "Design",
+            "icon": "🎨"
+        },
+        {
+            "id": "games",
+            "name": "Games",
+            "icon": "🎮"
+        },
+        {
+            "id": "ai-agents",
+            "name": "AI Agents",
+            "icon": "🤖"
+        },
+        {
+            "id": "utilities",
+            "name": "Utilities",
+            "icon": "⚙️"
+        },
+        {
+            "id": "education",
+            "name": "Education",
+            "icon": "📚"
+        },
+        {
+            "id": "finance",
+            "name": "Finance",
+            "icon": "💰"
+        },
+        {
+            "id": "social",
+            "name": "Social",
+            "icon": "👥"
+        },
+        {
+            "id": "other",
+            "name": "Other",
+            "icon": "📦"
+        }
+    ]
+}

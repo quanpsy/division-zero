@@ -1,0 +1,229 @@
+{
+    "_description": "Categories for tools and tech stacks",
+    "_last_updated": "2024-12-11",
+    "types": [
+        {
+            "id": "ai_assistant",
+            "name": "AI Assistant",
+            "icon": "🤖",
+            "description": "AI language models for code generation and assistance"
+        },
+        {
+            "id": "code_editor",
+            "name": "Code Editor",
+            "icon": "📝",
+            "description": "IDEs and text editors for writing code"
+        },
+        {
+            "id": "no_code",
+            "name": "No-Code Builder",
+            "icon": "🧱",
+            "description": "Visual builders that generate code"
+        },
+        {
+            "id": "framework",
+            "name": "Framework",
+            "icon": "🏗️",
+            "description": "Frontend or full-stack frameworks"
+        },
+        {
+            "id": "library",
+            "name": "Library",
+            "icon": "📚",
+            "description": "Reusable code packages"
+        },
+        {
+            "id": "backend",
+            "name": "Backend",
+            "icon": "⚙️",
+            "description": "Server-side technologies and APIs"
+        },
+        {
+            "id": "database",
+            "name": "Database",
+            "icon": "🗄️",
+            "description": "Data storage solutions"
+        },
+        {
+            "id": "hosting",
+            "name": "Hosting",
+            "icon": "☁️",
+            "description": "Deployment and hosting platforms"
+        },
+        {
+            "id": "design",
+            "name": "Design",
+            "icon": "🎨",
+            "description": "Design tools and asset generators"
+        },
+        {
+            "id": "other",
+            "name": "Other",
+            "icon": "🔧",
+            "description": "Other developer tools"
+        }
+    ],
+    "categories": [
+        {
+            "id": "ai-assistants",
+            "name": "AI Assistants",
+            "icon": "🤖",
+            "description": "AI tools that help you write code",
+            "examples": [
+                "Claude",
+                "ChatGPT",
+                "Gemini",
+                "Copilot"
+            ]
+        },
+        {
+            "id": "code-editors",
+            "name": "Code Editors",
+            "icon": "📝",
+            "description": "Where you write and edit code",
+            "examples": [
+                "Cursor",
+                "VS Code",
+                "Windsurf",
+                "Zed"
+            ]
+        },
+        {
+            "id": "no-code-builders",
+            "name": "No-Code Builders",
+            "icon": "🧱",
+            "description": "Build apps without writing code manually",
+            "examples": [
+                "Bolt.new",
+                "v0.dev",
+                "Lovable",
+                "Replit Agent"
+            ]
+        },
+        {
+            "id": "frontend",
+            "name": "Frontend",
+            "icon": "🖼️",
+            "description": "UI frameworks and libraries",
+            "examples": [
+                "React",
+                "Next.js",
+                "Vue",
+                "Svelte"
+            ]
+        },
+        {
+            "id": "backend",
+            "name": "Backend",
+            "icon": "⚙️",
+            "description": "Server-side frameworks and runtimes",
+            "examples": [
+                "Node.js",
+                "Python",
+                "Express",
+                "FastAPI"
+            ]
+        },
+        {
+            "id": "database",
+            "name": "Database",
+            "icon": "🗄️",
+            "description": "Data storage and management",
+            "examples": [
+                "Supabase",
+                "Firebase",
+                "PostgreSQL",
+                "MongoDB"
+            ]
+        },
+        {
+            "id": "hosting",
+            "name": "Hosting",
+            "icon": "☁️",
+            "description": "Deploy and host your apps",
+            "examples": [
+                "Vercel",
+                "Netlify",
+                "Railway",
+                "Cloudflare"
+            ]
+        },
+        {
+            "id": "design",
+            "name": "Design",
+            "icon": "🎨",
+            "description": "Design and asset creation tools",
+            "examples": [
+                "Figma",
+                "Midjourney",
+                "DALL-E",
+                "Canva"
+            ]
+        },
+        {
+            "id": "utilities",
+            "name": "Utilities",
+            "icon": "🔧",
+            "description": "Helper tools and utilities",
+            "examples": [
+                "GitHub",
+                "Postman",
+                "Notion",
+                "Linear"
+            ]
+        }
+    ],
+    "pricing_models": [
+        {
+            "id": "free",
+            "name": "Free",
+            "icon": "🆓",
+            "description": "Completely free to use"
+        },
+        {
+            "id": "freemium",
+            "name": "Freemium",
+            "icon": "💳",
+            "description": "Free tier with paid upgrades"
+        },
+        {
+            "id": "paid",
+            "name": "Paid",
+            "icon": "💰",
+            "description": "Requires payment to use"
+        },
+        {
+            "id": "open_source",
+            "name": "Open Source",
+            "icon": "🌐",
+            "description": "Free and open source"
+        }
+    ],
+    "vibecoding_scores": [
+        {
+            "score": 5,
+            "label": "Essential",
+            "description": "Core tool for vibecoding, highly recommended"
+        },
+        {
+            "score": 4,
+            "label": "Very Useful",
+            "description": "Significantly improves workflow"
+        },
+        {
+            "score": 3,
+            "label": "Helpful",
+            "description": "Good addition to your toolkit"
+        },
+        {
+            "score": 2,
+            "label": "Situational",
+            "description": "Useful in specific scenarios"
+        },
+        {
+            "score": 1,
+            "label": "Optional",
+            "description": "Nice to have but not required"
+        }
+    ]
+}

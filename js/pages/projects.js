@@ -1,0 +1,212 @@
+/* ============================================
+   projects.js - Projects Page Script
+   ============================================
+   
+   📄 PROJECTS PAGE INITIALIZATION
+   
+   This script runs on projects.html.
+   It handles:
+   - Loading project data
+   - Rendering carousels
+   - Search and filtering
+   
+   ============================================ */
+
+
+// Store loaded projects data
+let projectsData = null;
+
+
+/**
+ * Initialize the projects page
+ */
+async function initProjectsPage() {
+
+    // Render nav and footer
+    const navPlaceholder = document.getElementById('nav-placeholder');
+    if (navPlaceholder) {
+        const activePage = navPlaceholder.dataset.page || 'projects';
+        renderNavigation(activePage);
+    }
+    renderFooter();
+
+    // Load and render projects
+    await loadAndRenderProjects();
+
+    // Initialize search and filters
+    initSearch();
+    initFilters();
+    initCarousels();
+}
+
+
+/**
+ * Load project data and render carousels
+ */
+async function loadAndRenderProjects() {
+    const container = document.getElementById('projects-container');
+    if (!container) return;
+
+    // Load data from JSON
+    projectsData = await utils.loadJSON('data/projects.json');
+
+    if (!projectsData) {
+        container.innerHTML = `
+            <div class="no-results">
+                <h3>Unable to load projects</h3>
+                <p>Please try again later.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Define categories to show
+    const categories = [
+        { id: 'promoted', title: '✨ Promoted' },
+        { id: 'trending', title: '🔥 Top 10 Trending' },
+        { id: 'productivity', title: '💼 Productivity' },
+        { id: 'newReleases', title: '🆕 New Releases' },
+        { id: 'games', title: '🎮 Games' }
+    ];
+
+    // Render each category
+    categories.forEach(category => {
+        const items = projectsData[category.id];
+        if (items && items.length > 0) {
+            const section = createCategoryCarousel(category, items);
+            if (section) {
+                container.appendChild(section);
+            }
+        }
+    });
+}
+
+
+/**
+ * Initialize search functionality
+ */
+function initSearch() {
+    const searchInput = document.getElementById('project-search');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', utils.debounce((e) => {
+        performSearch(e.target.value);
+    }, 300));
+}
+
+
+/**
+ * Initialize category filters
+ */
+function initFilters() {
+    const filterBtns = document.querySelectorAll('.filter-btn');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            // Update active state
+            filterBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // Filter projects
+            const filter = this.dataset.filter;
+            performFilter(filter);
+        });
+    });
+}
+
+
+/**
+ * Search projects by query
+ * 
+ * @param {string} query - Search query
+ */
+function performSearch(query) {
+    const categories = document.querySelectorAll('.project-category');
+    let hasResults = false;
+
+    query = query.toLowerCase().trim();
+
+    categories.forEach(category => {
+        const cards = category.querySelectorAll('.project-card');
+        let categoryHasResults = false;
+
+        cards.forEach(card => {
+            const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
+            const desc = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
+            const techItems = Array.from(card.querySelectorAll('.tech-item'))
+                .map(t => t.textContent.toLowerCase());
+
+            const matchesSearch = !query ||
+                title.includes(query) ||
+                desc.includes(query) ||
+                techItems.some(t => t.includes(query));
+
+            if (matchesSearch) {
+                card.style.display = 'block';
+                categoryHasResults = true;
+                hasResults = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        category.style.display = categoryHasResults ? 'block' : 'none';
+    });
+
+    toggleNoResults(!hasResults);
+}
+
+
+/**
+ * Filter projects by category
+ * 
+ * @param {string} filter - Category ID or 'all'
+ */
+function performFilter(filter) {
+    const categories = document.querySelectorAll('.project-category');
+
+    if (filter === 'all') {
+        categories.forEach(cat => cat.style.display = 'block');
+        return;
+    }
+
+    categories.forEach(category => {
+        const carousel = category.querySelector('.project-carousel');
+        const categoryId = carousel?.dataset.category || '';
+
+        if (categoryId === filter || filter === 'all') {
+            category.style.display = 'block';
+        } else {
+            category.style.display = 'none';
+        }
+    });
+}
+
+
+/**
+ * Show/hide no results message
+ */
+function toggleNoResults(show) {
+    let noResults = document.getElementById('no-results');
+
+    if (show && !noResults) {
+        noResults = document.createElement('div');
+        noResults.id = 'no-results';
+        noResults.className = 'no-results';
+        noResults.innerHTML = `
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <h3>No Projects Found</h3>
+            <p>Try adjusting your search or filters</p>
+        `;
+        document.getElementById('projects-container')?.appendChild(noResults);
+    } else if (!show && noResults) {
+        noResults.remove();
+    }
+}
+
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initProjectsPage);

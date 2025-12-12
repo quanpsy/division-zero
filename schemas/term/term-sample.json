@@ -1,0 +1,21 @@
+{
+    "_comment": "Sample dictionary term",
+    "id": "glassmorphism",
+    "name": "Glassmorphism",
+    "icon": "🪟",
+    "category": "UI/UX",
+    "definition": "A design style using frosted glass effect with background blur and transparency. Creates a modern, premium aesthetic.",
+    "useCase": "Modern UI cards, modals, and overlays for a premium aesthetic.",
+    "example": "Our project cards use glassmorphism with backdrop blur.",
+    "prompt": "Style this card with glassmorphism. Use background: rgba(255, 255, 255, 0.1), backdrop-filter: blur(10px), and a subtle border. Make it semi-transparent with a frosted glass appearance.",
+    "related": [
+        "dark-mode",
+        "skeleton-loader"
+    ],
+    "difficulty": "beginner",
+    "tags": [
+        "css",
+        "visual",
+        "modern"
+    ]
+}

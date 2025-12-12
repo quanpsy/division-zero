@@ -1,0 +1,113 @@
+{
+    "_schema_version": "1.1",
+    "_description": "Schema for FREE idea validation submissions - with approval gate to prevent spam",
+    "_flow": {
+        "1_submit": "User submits idea via validation form",
+        "2_webhook": "Form triggers validation webhook",
+        "3_bot_posts_approval": "Bot posts to APPROVAL GROUP (20 moderators) for review",
+        "4_moderator_approves": "Any moderator can approve (react or command)",
+        "5_bot_creates_thread": "ONLY after approval: Bot creates public discussion thread",
+        "6_bot_saves_sheet": "Bot saves to Google Sheet with thread link",
+        "7_bot_shares": "Bot shares in assigned validation groups",
+        "8_optional_add_user": "If Discord ID provided, bot adds user to thread",
+        "9_community_responds": "Community members provide feedback in thread"
+    },
+    "validation_idea": {
+        "// ============================================": "",
+        "// SECTION 1: USER SUBMITTED (via form)": "",
+        "// ============================================": "",
+        "name": "Submitter's Name",
+        "email": "submitter@email.com",
+        "discordId": "@optional_discord_username",
+        "_discordId_note": "Optional - if provided, user is added to the thread after approval",
+        "ideaTitle": "Short title for the idea",
+        "ideaDescription": "Brief description of what they want to build",
+        "ideaDocLink": "https://docs.google.com/... or notion link",
+        "_ideaDocLink_note": "Link to detailed doc, Notion, Google Doc, etc.",
+        "category": "App | Game | Tool | Website | Extension | Bot | Other",
+        "// ============================================": "",
+        "// SECTION 2: APPROVAL GATE (anti-spam)": "",
+        "// ============================================": "",
+        "approvalStatus": "pending_approval | approved | rejected",
+        "approvalGroupMessageId": "message_id_in_approval_channel",
+        "approvedBy": "moderator_discord_id",
+        "approvedAt": null,
+        "rejectedBy": null,
+        "rejectedAt": null,
+        "rejectionReason": null,
+        "// ============================================": "",
+        "// SECTION 3: BOT GENERATED (after approval)": "",
+        "// ============================================": "",
+        "id": "val_auto_generated_id",
+        "submittedAt": "2024-12-11T00:00:00Z",
+        "discordThreadLink": null,
+        "_discordThreadLink_note": "Only populated after approval",
+        "discordThreadId": null,
+        "googleSheetRow": null,
+        "sharedToGroups": [],
+        "userAddedToThread": false,
+        "// ============================================": "",
+        "// SECTION 4: COMMUNITY RESPONSE (after approval)": "",
+        "// ============================================": "",
+        "status": "pending_approval | in_discussion | validated | not_feasible | needs_more_info",
+        "responseCount": 0,
+        "lastActivityAt": null
+    },
+    "_webhook_config": {
+        "endpoint": "VALIDATION_WEBHOOK_URL",
+        "method": "POST",
+        "payload_includes": [
+            "name",
+            "email",
+            "discordId",
+            "ideaTitle",
+            "ideaDescription",
+            "ideaDocLink",
+            "category"
+        ]
+    },
+    "_approval_config": {
+        "approval_channel": "#idea-approval (private, ~20 moderators)",
+        "approval_method": "React with ✅ OR use !approve command",
+        "rejection_method": "React with ❌ OR use !reject <reason> command",
+        "auto_reject_after": "72 hours with no action (optional)"
+    },
+    "_discord_bot_actions": {
+        "on_submission": [
+            "1. Receive webhook payload",
+            "2. Post idea summary to #idea-approval channel",
+            "3. Add ✅ and ❌ reaction buttons",
+            "4. Wait for moderator action"
+        ],
+        "on_approval": [
+            "1. Create thread in #idea-validation channel",
+            "2. Post idea summary in thread with doc link",
+            "3. Add user to thread (if discordId provided)",
+            "4. Save to Google Sheet with thread link",
+            "5. Cross-post notification to validation groups",
+            "6. Update approval message with 'APPROVED by @mod'"
+        ],
+        "on_rejection": [
+            "1. Update approval message with 'REJECTED by @mod: reason'",
+            "2. Optionally notify submitter via email",
+            "3. Log to rejected ideas sheet"
+        ]
+    },
+    "_google_sheet_columns": [
+        "ID",
+        "Timestamp",
+        "Name",
+        "Email",
+        "Discord ID",
+        "Idea Title",
+        "Idea Description",
+        "Doc Link",
+        "Category",
+        "Approval Status",
+        "Approved By",
+        "Approved At",
+        "Discord Thread Link",
+        "Status",
+        "Response Count"
+    ]
+}

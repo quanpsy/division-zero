@@ -1,0 +1,55 @@
+{
+    "_description": "Master list of all schemas and configurations to define for Division Zero",
+    "_last_updated": "2024-12-11",
+    "// ============================================ PROJECTS": "",
+    "projects": {
+        "schema": "✅ DONE - project/project-schema.json",
+        "sample": "✅ DONE - project/project-sample.json",
+        "categories": "✅ DONE - project/project-categories.json"
+    },
+    "// ============================================ DICTIONARY": "",
+    "dictionary": {
+        "term_schema": "✅ DONE - term/term-schema.json",
+        "term_sample": "✅ DONE - term/term-sample.json",
+        "categories": "✅ DONE - term/dictionary-categories.json"
+    },
+    "// ============================================ IDEAS": "",
+    "ideas": {
+        "validation_schema": "✅ DONE - ideas/validation-idea-schema.json",
+        "validation_sample": "✅ DONE - ideas/validation-idea-sample.json",
+        "paid_schema": "✅ DONE - ideas/paid-idea-schema.json",
+        "paid_sample": "✅ DONE - ideas/paid-idea-sample.json",
+        "categories": "✅ DONE - ideas/idea-categories.json"
+    },
+    "// ============================================ TOOLS": "",
+    "tools": {
+        "schema": "✅ DONE - tools/tool-schema.json",
+        "sample": "✅ DONE - tools/tool-sample.json",
+        "categories": "✅ DONE - tools/tool-categories.json",
+        "curated_list": "✅ DONE - tools/curated-tools.json"
+    },
+    "// ============================================ DISCORD BOT": "",
+    "discord": {
+        "moderation_commands": "❌ TODO - List of all bot commands",
+        "webhooks": "❌ TODO - Webhook endpoints for form submissions",
+        "roles": "❌ TODO - Moderator roles and permissions"
+    },
+    "// ============================================ ANALYTICS & RANKING": "",
+    "analytics": {
+        "trending_algorithm": "❌ TODO - Formula for trendingScore",
+        "popularity_algorithm": "❌ TODO - Formula for popularityScore",
+        "refresh_schedule": "❌ TODO - How often to recalculate (6 hours?)"
+    },
+    "// ============================================ INFRASTRUCTURE": "",
+    "infrastructure": {
+        "proxy_links": "❌ TODO - Cloudflare worker for *.divisionzero.dev",
+        "supabase_tables": "❌ TODO - Database table schemas",
+        "json_export": "❌ TODO - Cron job to export JSON every 6 hours"
+    },
+    "// ============================================ SUMMARY": "",
+    "_summary": {
+        "done": 14,
+        "todo": 9,
+        "total": 23
+    }
+}

@@ -1,0 +1,112 @@
+{
+    "_description": "Dictionary/Vocabulary categories for Division Zero",
+    "// ============================================": "",
+    "// DICTIONARY CATEGORIES": "",
+    "// ============================================": "",
+    "categories": [
+        {
+            "id": "uiux",
+            "name": "UI/UX",
+            "icon": "🎨",
+            "description": "User interface and experience patterns",
+            "examples": [
+                "Hamburger Menu",
+                "Glassmorphism",
+                "Dark Mode",
+                "Skeleton Loader"
+            ]
+        },
+        {
+            "id": "backend",
+            "name": "Backend",
+            "icon": "🔧",
+            "description": "Server-side concepts and APIs",
+            "examples": [
+                "API",
+                "Database",
+                "Authentication",
+                "Webhook"
+            ]
+        },
+        {
+            "id": "features",
+            "name": "Features",
+            "icon": "⚡",
+            "description": "Common app features and functionality",
+            "examples": [
+                "Search",
+                "Carousel",
+                "Modal",
+                "Form Validation",
+                "PWA"
+            ]
+        },
+        {
+            "id": "concepts",
+            "name": "Concepts",
+            "icon": "💡",
+            "description": "Core development concepts and best practices",
+            "examples": [
+                "PRD",
+                "Responsive Design",
+                "SEO"
+            ]
+        },
+        {
+            "id": "ai",
+            "name": "AI & Prompts",
+            "icon": "🤖",
+            "description": "AI tools and prompting techniques",
+            "examples": [
+                "Prompt Engineering",
+                "Context Window",
+                "Chain of Thought"
+            ]
+        },
+        {
+            "id": "deployment",
+            "name": "Deployment",
+            "icon": "🚀",
+            "description": "Hosting, CI/CD, and going live",
+            "examples": [
+                "Vercel Deploy",
+                "Environment Variables",
+                "Domain Setup"
+            ]
+        },
+        {
+            "id": "database",
+            "name": "Database",
+            "icon": "🗄️",
+            "description": "Data storage and management",
+            "examples": [
+                "Supabase",
+                "Firebase",
+                "PostgreSQL",
+                "CRUD"
+            ]
+        },
+        {
+            "id": "tools",
+            "name": "Tools & Stack",
+            "icon": "🛠️",
+            "description": "Development tools and tech stack",
+            "examples": [
+                "Git",
+                "VS Code",
+                "npm",
+                "TailwindCSS"
+            ]
+        }
+    ],
+    "displayOrder": [
+        "uiux",
+        "features",
+        "backend",
+        "database",
+        "ai",
+        "deployment",
+        "concepts",
+        "tools"
+    ]
+}

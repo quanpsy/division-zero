@@ -1,0 +1,119 @@
+/* ============================================
+   submit-project-form.css - Submit Project Pod
+   ============================================
+   
+   🔲 ISOLATED COMPONENT: PROJECT SUBMISSION FORM
+   
+   Styles specific to the project submission form.
+   Uses base form styles from components/forms.css.
+   
+   FORM STRUCTURE:
+   ┌─────────────────────────────────────────┐
+   │        Submit Your Project              │
+   │   Share your creation with community    │
+   ├─────────────────────────────────────────┤
+   │  BASIC INFORMATION                      │
+   │  ┌─────────────┐ ┌─────────────┐        │
+   │  │ Project Name│ │ Live URL    │        │
+   │  └─────────────┘ └─────────────┘        │
+   │  ┌─────────────────────────────┐        │
+   │  │ Description                 │        │
+   │  └─────────────────────────────┘        │
+   │  ┌─────────────────────────────┐        │
+   │  │ Logo URL                    │        │
+   │  └─────────────────────────────┘        │
+   ├─────────────────────────────────────────┤
+   │  LINKS                                  │
+   │  ┌─────────────┐ ┌─────────────┐        │
+   │  │ GitHub      │ │ Discord     │        │
+   │  └─────────────┘ └─────────────┘        │
+   ├─────────────────────────────────────────┤
+   │  TECHNOLOGY                             │
+   │  [Claude] [ChatGPT] [Cursor] ...        │
+   │  [React] [Next.js] [Vue] ...            │
+   │  Category: [Dropdown]                   │
+   ├─────────────────────────────────────────┤
+   │          [Submit Project]               │
+   └─────────────────────────────────────────┘
+   
+   ============================================ */
+
+
+/* ========================================
+   PROJECT FORM SPECIFIC STYLES
+   ======================================== */
+#project-form {
+    /* Animation for form switch */
+    transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+#project-form.hidden {
+    display: none;
+}
+
+
+/* ========================================
+   PROJECT FORM SECTIONS
+   ----------------------------------------
+   Visual styling for each section
+   ======================================== */
+#project-form .form-section-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+#project-form .form-section-title::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 1.2em;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+}
+
+
+/* ========================================
+   PROJECT TILE GRIDS
+   ----------------------------------------
+   AI Tools and Tech Stack selectors
+   ======================================== */
+#project-form .tile-grid {
+    margin-top: var(--spacing-xs);
+}
+
+#project-form .tile-grid .tile {
+    /* Project form tiles can have icons */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+
+/* ========================================
+   SUBMIT BUTTON - Project
+   ======================================== */
+#project-form .btn-submit {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: var(--gradient-primary);
+    border: none;
+    border-radius: var(--radius-md);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    margin-top: var(--spacing-lg);
+}
+
+#project-form .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-glow);
+}
+
+#project-form .btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}

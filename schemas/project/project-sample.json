@@ -1,0 +1,76 @@
+{
+    "_comment": "Sample Division Zero project - appears in Trending + Division Zero carousel",
+    "// ============================================": "",
+    "// SECTION 1: USER SUBMITTED (via form)": "",
+    "// ============================================": "",
+    "name": "VibeCheck",
+    "description": "AI tool that analyzes your code vibes and suggests improvements. Built by the Division Zero core team.",
+    "category": "Developer Tools",
+    "builder": {
+        "name": "Division Zero Team",
+        "discord": "@divisionzero",
+        "profileUrl": "https://divisionzero.dev",
+        "github": "https://github.com/divisionzero"
+    },
+    "originalUrl": "https://vibecheck-app.vercel.app",
+    "githubRepo": "https://github.com/divisionzero/vibecheck",
+    "logo": "assets/projects/vibecheck-logo.png",
+    "tools": [
+        "Claude",
+        "Cursor",
+        "Bolt.new"
+    ],
+    "tags": [
+        "Next.js",
+        "Supabase",
+        "TailwindCSS",
+        "OpenAI API"
+    ],
+    "// ============================================": "",
+    "// SECTION 2: MODERATOR ADDED (via Discord)": "",
+    "// ============================================": "",
+    "status": "approved",
+    "isDivisionZero": true,
+    "featured": false,
+    "promoted": false,
+    "verified": true,
+    "moderatorNotes": "Core team project",
+    "approvedBy": "mod_founder",
+    "lastModeratedAt": "2024-12-11T01:00:00Z",
+    "lastModeratedBy": "mod_founder",
+    "// ============================================": "",
+    "// SECTION 3: BOT/WORKER GENERATED (automated)": "",
+    "// ============================================": "",
+    "id": "vibecheck-2024-dz001",
+    "slug": "vibecheck",
+    "proxyUrl": "https://vibecheck.divisionzero.dev",
+    "discordThread": "https://discord.com/channels/123456789/111222333",
+    "discordMessageId": "999888777666",
+    "dates": {
+        "submitted": "2024-12-01T10:00:00Z",
+        "approved": "2024-12-01T10:05:00Z",
+        "lastUpdated": "2024-12-11T00:00:00Z"
+    },
+    "// ============================================": "",
+    "// SECTION 4: ALGORITHM GENERATED (analytics/ranking)": "",
+    "// ============================================": "",
+    "analytics": {
+        "totalViews": 5420,
+        "viewsToday": 156,
+        "viewsThisWeek": 890,
+        "viewsThisMonth": 3200,
+        "uniqueVisitors": 2100,
+        "clicks": 892,
+        "saves": 234
+    },
+    "ranking": {
+        "trendingScore": 94.2,
+        "popularityScore": 88.7,
+        "newScore": 45.0,
+        "overallRank": 1,
+        "categoryRank": 1
+    },
+    "slot": "trending",
+    "sortOrder": 1,
+    "_display_explanation": "This project appears in: 1) Trending carousel (its main slot) + 2) Division Zero carousel at bottom (bonus because isDivisionZero: true)"
+}

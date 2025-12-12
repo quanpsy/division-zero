@@ -1,0 +1,172 @@
+{
+    "promoted": [],
+    "trending": [
+        {
+            "id": 1,
+            "name": "TaskFlow Pro",
+            "description": "Modern task management with AI-powered prioritization and team collaboration features.",
+            "logo": "https://via.placeholder.com/80x80/8b5cf6/ffffff?text=TF",
+            "vercelUrl": "https://taskflow-demo.vercel.app",
+            "tags": ["React", "Node.js", "AI"],
+            "tools": ["Claude", "Cursor", "Vercel"],
+            "views": 12500,
+            "category": "Productivity",
+            "github": "https://github.com/example/taskflow",
+            "discord": "https://discord.gg/example",
+            "builder": "vibecoder1"
+        },
+        {
+            "id": 2,
+            "name": "CodeSnap",
+            "description": "Beautiful code screenshot generator with syntax highlighting and custom themes.",
+            "logo": "https://via.placeholder.com/80x80/06b6d4/ffffff?text=CS",
+            "vercelUrl": "https://codesnap-demo.vercel.app",
+            "tags": ["Next.js", "TypeScript"],
+            "tools": ["ChatGPT", "Cursor"],
+            "views": 9800,
+            "category": "Developer Tools",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 3,
+            "name": "MoodBoard",
+            "description": "Collaborative mood board and inspiration collection tool for creative teams.",
+            "logo": "https://via.placeholder.com/80x80/ec4899/ffffff?text=MB",
+            "vercelUrl": "https://moodboard-demo.vercel.app",
+            "tags": ["React", "Firebase"],
+            "tools": ["Claude", "v0.dev"],
+            "views": 8200,
+            "category": "Design",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 4,
+            "name": "QuickPoll",
+            "description": "Real-time polling and voting platform for teams and communities.",
+            "logo": "https://via.placeholder.com/80x80/f59e0b/ffffff?text=QP",
+            "vercelUrl": "https://quickpoll-demo.vercel.app",
+            "tags": ["Vue.js", "Socket.io"],
+            "tools": ["ChatGPT"],
+            "views": 7500,
+            "category": "Productivity",
+            "discord": "https://discord.gg/example"
+        }
+    ],
+    "productivity": [
+        {
+            "id": 5,
+            "name": "FocusTimer",
+            "description": "Pomodoro timer with detailed analytics and goal tracking features.",
+            "logo": "https://via.placeholder.com/80x80/10b981/ffffff?text=FT",
+            "vercelUrl": "https://focustimer-demo.vercel.app",
+            "tags": ["React", "Chart.js"],
+            "tools": ["Claude"],
+            "views": 6800,
+            "category": "Productivity",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 6,
+            "name": "NoteSync",
+            "description": "Cross-platform note-taking with markdown support and real-time sync.",
+            "logo": "https://via.placeholder.com/80x80/6366f1/ffffff?text=NS",
+            "vercelUrl": "https://notesync-demo.vercel.app",
+            "tags": ["Next.js", "MongoDB"],
+            "tools": ["Cursor"],
+            "views": 5900,
+            "category": "Productivity",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 7,
+            "name": "MeetingMate",
+            "description": "AI meeting assistant with automatic transcription and action items.",
+            "logo": "https://via.placeholder.com/80x80/8b5cf6/ffffff?text=MM",
+            "vercelUrl": "https://meetingmate-demo.vercel.app",
+            "tags": ["React", "OpenAI"],
+            "tools": ["Claude", "OpenAI"],
+            "views": 5200,
+            "category": "Productivity",
+            "discord": "https://discord.gg/example"
+        }
+    ],
+    "newReleases": [
+        {
+            "id": 8,
+            "name": "WeatherNow",
+            "description": "Beautiful weather app with hourly forecasts and location-based alerts.",
+            "logo": "https://via.placeholder.com/80x80/14b8a6/ffffff?text=WN",
+            "vercelUrl": "https://weathernow-demo.vercel.app",
+            "tags": ["React", "Weather API"],
+            "tools": ["Claude"],
+            "views": 3200,
+            "category": "Utilities",
+            "isNew": true,
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 9,
+            "name": "GitStats",
+            "description": "Visualize your GitHub contribution statistics with beautiful charts.",
+            "logo": "https://via.placeholder.com/80x80/06b6d4/ffffff?text=GS",
+            "vercelUrl": "https://gitstats-demo.vercel.app",
+            "tags": ["Next.js", "GitHub API"],
+            "tools": ["Cursor"],
+            "views": 2800,
+            "category": "Developer Tools",
+            "isNew": true,
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 10,
+            "name": "ColorPal",
+            "description": "AI-powered color palette generator for designers and developers.",
+            "logo": "https://via.placeholder.com/80x80/ec4899/ffffff?text=CP",
+            "vercelUrl": "https://colorpal-demo.vercel.app",
+            "tags": ["Vue.js", "AI"],
+            "tools": ["Claude", "v0.dev"],
+            "views": 2100,
+            "category": "Design",
+            "isNew": true,
+            "discord": "https://discord.gg/example"
+        }
+    ],
+    "games": [
+        {
+            "id": 11,
+            "name": "WordMaster",
+            "description": "Multiplayer word puzzle game with daily challenges and leaderboards.",
+            "logo": "https://via.placeholder.com/80x80/f59e0b/ffffff?text=WM",
+            "vercelUrl": "https://wordmaster-demo.vercel.app",
+            "tags": ["React", "WebSocket"],
+            "tools": ["ChatGPT"],
+            "views": 15200,
+            "category": "Games",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 12,
+            "name": "MemoryMatch",
+            "description": "Classic memory card game with beautiful themes and difficulty levels.",
+            "logo": "https://via.placeholder.com/80x80/8b5cf6/ffffff?text=MM",
+            "vercelUrl": "https://memorymatch-demo.vercel.app",
+            "tags": ["JavaScript", "CSS"],
+            "tools": ["Claude"],
+            "views": 8900,
+            "category": "Games",
+            "discord": "https://discord.gg/example"
+        },
+        {
+            "id": 13,
+            "name": "QuizQuest",
+            "description": "Trivia quiz platform with multiplayer mode and category selection.",
+            "logo": "https://via.placeholder.com/80x80/10b981/ffffff?text=QQ",
+            "vercelUrl": "https://quizquest-demo.vercel.app",
+            "tags": ["Next.js", "PostgreSQL"],
+            "tools": ["Cursor"],
+            "views": 7300,
+            "category": "Games",
+            "discord": "https://discord.gg/example"
+        }
+    ]
+}
