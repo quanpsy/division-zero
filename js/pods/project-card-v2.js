@@ -23,24 +23,33 @@ function createProjectCardV2(project = {}) {
 
     // ========================================
     // DEFAULTS - Handle missing data
+    // Schema-compliant with backwards compatibility
     // ========================================
 
     const {
         name = 'Untitled Project',
         description = 'No description available.',
         logo = 'https://via.placeholder.com/80x80/8b5cf6/ffffff?text=?',
-        vercelUrl = '#',
+        // New schema fields with backwards compat
+        originalUrl = project.vercelUrl || '#',
         views = 0,
         tags = [],
         tools = [],
         category = 'default',
-        github = '',
-        discord = '#',
-        builder = '',
-        builderUrl = '#',
+        // New schema fields with backwards compat
+        githubRepo = project.github || '',
+        discordThread = project.discord || '#',
+        // Builder can be string (old) or object (new)
+        builder = {},
         promoted = false,
-        isNew = false
+        isNew = false,
+        // New field
+        isCompletelyPaid = false
     } = project;
+
+    // Handle builder as string (old) or object (new)
+    const builderName = typeof builder === 'string' ? builder : (builder.name || '');
+    const builderUrl = typeof builder === 'string' ? (project.builderUrl || '#') : (builder.profileUrl || '#');
 
 
     // ========================================
@@ -68,8 +77,8 @@ function createProjectCardV2(project = {}) {
     // GITHUB ICON - Only if URL provided
     // ========================================
 
-    const githubHTML = github ? `
-        <a href="${github}" 
+    const githubHTML = githubRepo ? `
+        <a href="${githubRepo}" 
            target="_blank" 
            rel="noopener noreferrer"
            class="card-icon github-link" 
@@ -86,7 +95,7 @@ function createProjectCardV2(project = {}) {
     // ========================================
 
     const discordHTML = `
-        <a href="${discord}" 
+        <a href="${discordThread}" 
            target="_blank" 
            rel="noopener noreferrer"
            class="card-icon discord-mandatory" 
@@ -105,7 +114,7 @@ function createProjectCardV2(project = {}) {
     const shareHTML = `
         <button class="card-icon stat-share" 
                 title="Share Project"
-                onclick="shareProject('${name}', '${vercelUrl}')">
+                onclick="shareProject('${name}', '${originalUrl}')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="18" cy="5" r="3"></circle>
                 <circle cx="6" cy="12" r="3"></circle>
@@ -162,10 +171,10 @@ function createProjectCardV2(project = {}) {
     // BUILDER LINK
     // ========================================
 
-    const builderHTML = builder
+    const builderHTML = builderName
         ? (builderUrl && builderUrl !== '#'
-            ? `<a href="${builderUrl}" class="card-builder" target="_blank" rel="noopener noreferrer">@${builder}</a>`
-            : `<span class="card-builder">@${builder}</span>`)
+            ? `<a href="${builderUrl}" class="card-builder" target="_blank" rel="noopener noreferrer">@${builderName}</a>`
+            : `<span class="card-builder">@${builderName}</span>`)
         : '';
 
 
@@ -187,7 +196,7 @@ function createProjectCardV2(project = {}) {
                 
                     <!-- Left: Logo -->
                     <div class="card-left">
-                        <a href="${vercelUrl}" target="_blank" rel="noopener noreferrer" class="card-logo-link">
+                        <a href="${originalUrl}" target="_blank" rel="noopener noreferrer" class="card-logo-link">
                             <div class="card-logo">
                                 <img src="${logo}" alt="${name} logo" loading="lazy">
                             </div>
