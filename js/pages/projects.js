@@ -127,13 +127,13 @@ function performSearch(query) {
     query = query.toLowerCase().trim();
 
     categories.forEach(category => {
-        const cards = category.querySelectorAll('.project-card');
+        const cards = category.querySelectorAll('.project-card-v2');
         let categoryHasResults = false;
 
         cards.forEach(card => {
             const title = card.querySelector('.card-title')?.textContent.toLowerCase() || '';
             const desc = card.querySelector('.card-description')?.textContent.toLowerCase() || '';
-            const techItems = Array.from(card.querySelectorAll('.tech-item'))
+            const techItems = Array.from(card.querySelectorAll('.inline-tech-item'))
                 .map(t => t.textContent.toLowerCase());
 
             const matchesSearch = !query ||

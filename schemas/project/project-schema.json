@@ -11,8 +11,7 @@
         "builder": {
             "name": "Builder's Name",
             "discord": "@username",
-            "profileUrl": "https://linkedin.com/in/... or personal website",
-            "github": "https://github.com/username"
+            "profileUrl": "https://linkedin.com/in/... or personal website"
         },
         "originalUrl": "https://their-app.vercel.app",
         "githubRepo": "https://github.com/user/repo",
@@ -27,8 +26,8 @@
             "Next.js",
             "Supabase"
         ],
-        "isCompletelyPaid": false,
-        "_isCompletelyPaid_note": "User declares if project was built entirely using paid tools (no free tier usage)",
+        "pricingModel": "free | partial | paid",
+        "_pricingModel_note": "free = all tools have free tier, partial = mix, paid = no free tier",
         "// ============================================": "",
         "// SECTION 2: MODERATOR ADDED (via Discord)": "",
         "// ============================================": "",

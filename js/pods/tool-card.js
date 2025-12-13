@@ -31,17 +31,25 @@ function createToolCard(tool = {}) {
 
     // ========================================
     // DEFAULTS - Handle missing data
+    // Support both old schema (logo, url) and new schema (icon, website)
     // ========================================
 
     const {
         name = 'Tool Name',
         description = 'No description available.',
-        logo = 'https://via.placeholder.com/60x60/8b5cf6/ffffff?text=?',
-        url = '#',
-        features = [],
-        skillLevel = 'All levels',
-        pricing = 'See website'
+        icon,
+        logo,
+        website,
+        url,
+        difficulty = 5,
+        capability = 5,
+        free_tier = true,
+        features = []
     } = tool;
+
+    // Backwards compatibility: prefer new field names, fall back to old
+    const toolIcon = icon || logo || 'https://via.placeholder.com/60x60/8b5cf6/ffffff?text=?';
+    const toolUrl = website || url || '#';
 
 
     // ========================================
@@ -54,6 +62,39 @@ function createToolCard(tool = {}) {
 
 
     // ========================================
+    // RATING BARS - The "Broken 7" Easter Egg
+    // 10 circles, 7th is always broken/flickering
+    // ========================================
+
+    function createRatingBar(value, label) {
+        let dots = '';
+        for (let i = 1; i <= 10; i++) {
+            const isFilled = i <= value;
+            const isBroken = i === 7;
+
+            if (isBroken) {
+                // The broken 7th circle - random flicker ID for each
+                const flickerId = `flicker-${Math.random().toString(36).substr(2, 9)}`;
+                dots += `<span class="rating-dot broken" id="${flickerId}"></span>`;
+            } else if (isFilled) {
+                dots += `<span class="rating-dot filled"></span>`;
+            } else {
+                dots += `<span class="rating-dot empty"></span>`;
+            }
+        }
+        return `
+            <div class="rating-row">
+                <span class="rating-label">${label}</span>
+                <div class="rating-dots">${dots}</div>
+            </div>
+        `;
+    }
+
+    const difficultyHTML = createRatingBar(difficulty, 'Difficulty');
+    const capabilityHTML = createRatingBar(capability, 'Capability');
+
+
+    // ========================================
     // FINAL CARD HTML
     // ========================================
 
@@ -62,29 +103,28 @@ function createToolCard(tool = {}) {
             
             <!-- HEADER: Logo + Name + Skill -->
             <div class="tool-header">
-                <img src="${logo}" 
+                <img src="${toolIcon}" 
                      alt="${name}" 
                      class="tool-logo"
-                     style="filter: invert(1);"
                      onerror="this.src='https://via.placeholder.com/60x60/8b5cf6/ffffff?text=?'">
                 <div>
                     <h3 class="tool-name">${name}</h3>
-                    <span class="tool-skill">${skillLevel}</span>
+                    <span class="tool-skill">${free_tier ? '✓ Free tier' : 'Paid only'}</span>
                 </div>
             </div>
             
             <!-- DESCRIPTION -->
             <p class="tool-description">${description}</p>
             
-            <!-- FEATURES -->
-            <div class="tool-features">
-                ${featuresHTML}
+            <!-- RATINGS -->
+            <div class="tool-ratings">
+                ${difficultyHTML}
+                ${capabilityHTML}
             </div>
             
-            <!-- FOOTER: Pricing + Link -->
+            <!-- FOOTER: Link -->
             <div class="tool-footer">
-                <span class="tool-pricing">${pricing}</span>
-                <a href="${url}" 
+                <a href="${toolUrl}" 
                    target="_blank" 
                    rel="noopener noreferrer" 
                    class="tool-link">
@@ -136,3 +176,29 @@ function createToolsCategory(category, tools) {
 // Make functions available globally
 window.createToolCard = createToolCard;
 window.createToolsCategory = createToolsCategory;
+
+
+/**
+ * Randomize flicker delays for broken 7 dots
+ * Called after tool cards are rendered to add random animation delays
+ */
+function initBroken7Flicker() {
+    const brokenDots = document.querySelectorAll('.rating-dot.broken');
+    brokenDots.forEach(dot => {
+        // Random delay between 0-5 seconds
+        const delay = Math.random() * 5;
+        dot.style.animationDelay = `${delay}s`;
+
+        // Also randomize animation duration slightly (2.5-3.5s)
+        const duration = 2.5 + Math.random();
+        dot.style.animationDuration = `${duration}s`;
+    });
+}
+
+// Run after DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait a bit for tool cards to render
+    setTimeout(initBroken7Flicker, 500);
+});
+
+window.initBroken7Flicker = initBroken7Flicker;

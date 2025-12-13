@@ -62,7 +62,7 @@ js/pods/carousel.js                   ← PUTS IN CAROUSEL
 | `builderUrl` | `builder.profileUrl` | 🔄 NESTED in schema |
 | `promoted` | `promoted` | ✅ Same |
 | `isNew` | (calculate from dates) | 🆕 Calculate |
-| N/A | `isCompletelyPaid` | 🆕 NEW FIELD |
+| N/A | `pricingModel` | 🆕 free/partial/paid |
 
 ---
 
@@ -100,6 +100,16 @@ This causes "duplicate key" lint warnings - IGNORE THEM.
 ### 5. The "No 7" Rule
 In tool ratings, NEVER use 7 for difficulty or capability.
 It's a Division Zero pun. Check `curated-tools.json`.
+
+### 6. File Editing Process
+**ORDER OF OPERATIONS when editing files:**
+1. Try `replace_file_content` tool first (direct edit)
+2. If fails with "target not found", try PowerShell regex replace
+3. If fails with "file in use", run `.\kill-server.bat` then retry
+
+**Common errors:**
+- `"target content not found"` = Line endings mismatch (use PowerShell)
+- `"file is being used"` = Server or editor has file open
 
 ---
 

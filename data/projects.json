@@ -24,10 +24,9 @@
             "builder": {
                 "name": "vibecoder1",
                 "discord": "@vibecoder1",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 2,
@@ -50,10 +49,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 3,
@@ -76,10 +74,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 4,
@@ -101,10 +98,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         }
     ],
     "productivity": [
@@ -128,10 +124,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 6,
@@ -153,10 +148,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 7,
@@ -179,10 +173,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         }
     ],
     "newReleases": [
@@ -207,10 +200,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 9,
@@ -233,10 +225,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 10,
@@ -260,10 +251,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         }
     ],
     "games": [
@@ -287,10 +277,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 12,
@@ -312,10 +301,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         },
         {
             "id": 13,
@@ -337,10 +325,9 @@
             "builder": {
                 "name": "",
                 "discord": "",
-                "profileUrl": "",
-                "github": ""
+                "profileUrl": ""
             },
-            "isCompletelyPaid": false
+            "pricingModel": "free"
         }
     ]
 }

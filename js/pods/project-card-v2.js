@@ -43,8 +43,8 @@ function createProjectCardV2(project = {}) {
         builder = {},
         promoted = false,
         isNew = false,
-        // New field
-        isCompletelyPaid = false
+        // Pricing model: free | partial | paid
+        pricingModel = 'free'
     } = project;
 
     // Handle builder as string (old) or object (new)
@@ -179,6 +179,19 @@ function createProjectCardV2(project = {}) {
 
 
     // ========================================
+    // PRICING BADGE - FREE / FREEMIUM / PAID
+    // ========================================
+
+    const pricingLabels = {
+        'free': 'FREE',
+        'partial': 'FREEMIUM',
+        'paid': 'PAID'
+    };
+    const pricingLabel = pricingLabels[pricingModel] || 'FREE';
+    const pricingBadgeHTML = `<span class="pricing-badge pricing-${pricingModel}">${pricingLabel}</span>`;
+
+
+    // ========================================
     // FINAL HTML BUILD
     // ========================================
 
@@ -207,7 +220,7 @@ function createProjectCardV2(project = {}) {
                     <div class="card-info">
                     
                         <!-- Title -->
-                        <a href="${vercelUrl}" target="_blank" rel="noopener noreferrer" class="card-title-link">
+                        <a href="${originalUrl}" target="_blank" rel="noopener noreferrer" class="card-title-link">
                             <h3 class="card-title">${name}</h3>
                         </a>
                         
@@ -236,9 +249,10 @@ function createProjectCardV2(project = {}) {
                         </div>
                     </div>
                     
-                    <!-- Row 2: Stack -->
+                    <!-- Row 2: Stack + Pricing Badge -->
                     <div class="card-bottom-row">
                         ${tagsHTML}
+                        ${pricingBadgeHTML}
                     </div>
                 </div>
                 

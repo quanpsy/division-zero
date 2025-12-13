@@ -91,6 +91,31 @@ function createTermPill(term = {}) {
 
 
 /**
+ * Create a rating bar with 10 dots (broken 7 easter egg)
+ */
+function createTermRatingBar(value = 5, label = "Difficulty") {
+    let dots = "";
+    for (let i = 1; i <= 10; i++) {
+        const isFilled = i <= value;
+        const isBroken = i === 7;
+
+        if (isBroken) {
+            dots += `<span class="rating-dot broken ${isFilled ? 'filled' : ''}" title="The forbidden number"></span>`;
+        } else {
+            dots += `<span class="rating-dot ${isFilled ? 'filled' : ''}"></span>`;
+        }
+    }
+
+    return `
+        <div class="rating-row">
+            <span class="rating-label">${label}</span>
+            <div class="rating-dots">${dots}</div>
+        </div>
+    `;
+}
+
+
+/**
  * Create a term modal HTML
  * 
  * @param {Object} term - Full term data
@@ -105,8 +130,12 @@ function createTermModalContent(term = {}) {
         definition = '',
         useCase = '',
         example = '',
-        prompt = ''
+        prompt = '',
+        difficulty = 5
     } = term;
+
+    // Generate difficulty rating HTML
+    const difficultyHTML = createTermRatingBar(difficulty, 'Difficulty');
 
     return `
         <div class="modal-header">
@@ -116,6 +145,11 @@ function createTermModalContent(term = {}) {
         </div>
         
         <div class="modal-body">
+            
+            <!-- DIFFICULTY RATING -->
+            <div class="term-section term-ratings">
+                ${difficultyHTML}
+            </div>
             
             <!-- DEFINITION -->
             <div class="term-section">

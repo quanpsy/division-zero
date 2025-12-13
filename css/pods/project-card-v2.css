@@ -297,3 +297,20 @@
         min-width: 320px;
     }
 }
+
+/* ========================================
+   PRICING BADGE - FREE / FREEMIUM / PAID
+   ======================================== */
+.project-card-v2 .pricing-badge {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.6rem;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--radius-full);
+    color: var(--color-primary-light);
+    text-transform: uppercase;
+    margin-left: auto;
+}

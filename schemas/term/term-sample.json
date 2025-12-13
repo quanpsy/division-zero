@@ -12,7 +12,7 @@
         "dark-mode",
         "skeleton-loader"
     ],
-    "difficulty": "beginner",
+    "difficulty": 2,
     "tags": [
         "css",
         "visual",

@@ -63,6 +63,16 @@
                 "capability": 9,
                 "description": "VS Code fork with AI superpowers. Very popular.",
                 "free_tier": true
+            },
+            {
+                "id": "windsurf",
+                "name": "Windsurf",
+                "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/codeium.svg",
+                "website": "https://codeium.com/windsurf",
+                "difficulty": 3,
+                "capability": 8,
+                "description": "Free AI IDE by Codeium. Great Cursor alternative.",
+                "free_tier": true
             }
         ]
     },
@@ -117,6 +127,16 @@
                 "difficulty": 3,
                 "capability": 8,
                 "description": "Build full apps without code. Great for MVPs.",
+                "free_tier": true
+            },
+            {
+                "id": "replit",
+                "name": "Replit",
+                "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/replit.svg",
+                "website": "https://replit.com",
+                "difficulty": 2,
+                "capability": 8,
+                "description": "Browser-based IDE. Code, run, deploy from anywhere. AI agent built-in.",
                 "free_tier": true
             }
         ]
@@ -235,16 +255,6 @@
                 "capability": 8,
                 "description": "OpenAI's image generator. Built into ChatGPT.",
                 "free_tier": true
-            },
-            {
-                "id": "figma",
-                "name": "Figma",
-                "icon": "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg",
-                "website": "https://figma.com",
-                "difficulty": 4,
-                "capability": 10,
-                "description": "Industry standard design tool. Useful for mockups.",
-                "free_tier": true
             }
         ]
     },
@@ -294,7 +304,7 @@
         ]
     },
     "_summary": {
-        "total_tools": 22,
+        "total_tools": 23,
         "categories": 9,
         "philosophy": "Less is more. Curated path from easy to advanced.",
         "no_seven_rule": "No difficulty or capability = 7. Division Zero pun!"

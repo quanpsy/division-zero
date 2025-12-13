@@ -112,6 +112,34 @@ function validateProjectInput(input) {
         }
     }
 
+    // Logo URL must be from approved hosts
+    if (input.id === 'project-logo' && value) {
+        const allowedHosts = ['imgur.com', 'i.imgur.com', 'imgbb.com', 'i.ibb.co', 'github.com', 'raw.githubusercontent.com'];
+        try {
+            const url = new URL(value);
+            const isAllowed = allowedHosts.some(host => url.hostname.includes(host));
+            if (!isAllowed) {
+                setProjectInputError(group, 'Imgur, ImgBB, GitHub only');
+                return false;
+            }
+        } catch {
+            // Already handled above
+        }
+    }
+
+    // GitHub repo URL must be from github.com
+    if (input.id === 'project-github' && value) {
+        try {
+            const url = new URL(value);
+            if (!url.hostname.includes('github.com')) {
+                setProjectInputError(group, 'GitHub URLs only');
+                return false;
+            }
+        } catch {
+            // Already handled above
+        }
+    }
+
     clearProjectInputError(input);
     return true;
 }
@@ -174,6 +202,18 @@ async function handleProjectSubmit(e) {
         }
     });
 
+    // Also validate logo URL (even though required validation passed)
+    const logoInput = form.querySelector('#project-logo');
+    if (logoInput && !validateProjectInput(logoInput)) {
+        isValid = false;
+    }
+
+    // Also validate GitHub repo URL
+    const githubInput = form.querySelector('#project-github');
+    if (githubInput && githubInput.value.trim() && !validateProjectInput(githubInput)) {
+        isValid = false;
+    }
+
     if (!isValid) {
         utils.showToast('Please fix the errors before submitting');
         return;
@@ -185,18 +225,38 @@ async function handleProjectSubmit(e) {
 
     // Collect form data
     const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    const rawData = Object.fromEntries(formData.entries());
 
-    // Add selected tiles
+    // Get selected tools and tags from tile grids
     const tileGrids = form.querySelectorAll('.tile-grid');
+    const tileData = {};
     tileGrids.forEach(grid => {
         const inputName = grid.dataset.inputName;
         const selected = Array.from(grid.querySelectorAll('.tile.selected'))
             .map(t => t.dataset.value);
-        data[inputName] = selected;
+        tileData[inputName] = selected;
     });
 
-    console.log('Project submission:', data);
+    // Build schema-compliant JSON
+    const projectData = {
+        // Section 1: User Submitted
+        name: rawData.name || '',
+        description: rawData.description || '',
+        category: rawData.category || '',
+        builder: {
+            name: rawData.builderName || '',
+            discord: rawData.discord || '',
+            profileUrl: rawData.profileUrl || ''
+        },
+        originalUrl: rawData.url || '',
+        githubRepo: rawData.github || '',
+        logo: rawData.logo || '',
+        tools: tileData.tools || [],
+        tags: tileData.tags || [],
+        pricingModel: rawData.pricingModel || 'free'
+    };
+
+    console.log('Project submission (schema-compliant):', projectData);
 
     // Submit to webhook if configured
     if (CONFIG.SUBMIT_WEBHOOK_URL) {

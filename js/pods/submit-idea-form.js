@@ -185,7 +185,34 @@ async function handleIdeaSubmit(e) {
         data.budget = '$' + data.budget;
     }
 
-    console.log('Idea submission:', data);
+    // Build schema-compliant object based on purpose
+    const isClient = data.purpose === 'client';
+    
+    const ideaData = {
+        // Section 1: Client/Submitter Info
+        clientName: data.clientName || '',
+        clientEmail: data.clientEmail || '',
+        discordId: data.discordId || '',
+        
+        // Section 2: Idea Details
+        ideaTitle: data.ideaTitle || '',
+        ideaDescription: data.ideaDescription || '',
+        ideaDocLink: data.ideaDocLink || '',
+        category: data.category || '',
+        
+        // Section 3: Purpose-specific
+        purpose: data.purpose || 'validation',
+        
+        // Client-only fields (only if purpose = 'client')
+        ...(isClient && {
+            budgetRange: data.budgetRange || '',
+            timeline: data.timeline || '',
+            additionalNotes: data.additionalNotes || ''
+        })
+    };
+
+    console.log('Idea submission:', ideaData);
+    console.log('Is paid client:', isClient);
 
     // Submit to webhook if configured
     if (CONFIG.IDEA_WEBHOOK_URL) {

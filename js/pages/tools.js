@@ -50,22 +50,35 @@ async function loadAndRenderTools() {
         return;
     }
 
-    // Define categories to show (in order)
+    // Define categories to show (in order) - matches curated-tools.json
     const categories = [
-        { id: 'ai', title: 'AI Assistants', description: 'Your coding co-pilots. Describe what you want, they write the code.' },
-        { id: 'nocode', title: 'No-Code Vibecoding Tools', description: 'Build full apps without writing code yourself. AI does the heavy lifting.' },
-        { id: 'backend', title: 'Backend Services', description: 'Database and auth without writing backend code. Just connect and use.' },
-        { id: 'hosting', title: 'Hosting & Deployment', description: 'Push to deploy. Your code live in seconds, for free.' }
+        { id: 'ai_chatbots', title: 'AI Chatbots', description: 'Your coding co-pilots. Describe what you want, they write the code.' },
+        { id: 'code_editors', title: 'Code Editors', description: 'AI-powered editors that understand your intent.' },
+        { id: 'no_code_builders', title: 'No-Code Builders', description: 'Build full apps without writing code. AI does the heavy lifting.' },
+        { id: 'frontend', title: 'Frontend Frameworks', description: 'Libraries for building user interfaces.' },
+        { id: 'backend', title: 'Backend', description: 'Server-side frameworks and runtimes.' },
+        { id: 'database', title: 'Database & Auth', description: 'Store data and manage users without writing backend code.' },
+        { id: 'hosting', title: 'Hosting', description: 'Deploy your apps to the world with one click.' },
+        { id: 'design', title: 'Design Tools', description: 'Create stunning visuals with AI.' },
+        { id: 'utilities', title: 'Utilities', description: 'Essential tools for developers.' }
     ];
 
     // Render each category
     categories.forEach(category => {
-        const tools = toolsData[category.id];
+        // Access tools array from category object (curated-tools.json structure)
+        const categoryData = toolsData[category.id];
+        const tools = categoryData?.tools || categoryData;
+
         if (tools && tools.length > 0) {
             const sectionHTML = createToolsCategory(category, tools);
             container.insertAdjacentHTML('beforeend', sectionHTML);
         }
     });
+
+    // Initialize broken 7 flicker effect
+    if (window.initBroken7Flicker) {
+        setTimeout(initBroken7Flicker, 100);
+    }
 }
 
 

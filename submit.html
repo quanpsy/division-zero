@@ -116,12 +116,20 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="project-logo">Logo URL</label>
-                            <input type="url" id="project-logo" name="logo" placeholder="https://example.com/logo.png">
+                            <label for="project-logo">Logo URL *</label>
+                            <input type="url" id="project-logo" name="logo" required
+                                placeholder="Imgur, ImgBB, GitHub only">
                             <span class="form-hint">Square image recommended (200x200 or larger)</span>
                         </div>
                     </div>
-
+                    <!-- BUILDER INFO ROW -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="builder-name">Your Username / Handle *</label>
+                            <input type="text" id="builder-name" name="builderName" required placeholder="vibecoder1">
+                            <span class="form-hint">This will show as @username on your project card</span>
+                        </div>
+                    </div>
                     <!-- LINKS SECTION -->
                     <div class="form-section">
                         <h3 class="form-section-title">Links (Optional)</h3>
@@ -202,6 +210,18 @@
                             </select>
                         </div>
                     </div>
+                    <!-- PRICING MODEL -->
+                    <div class="form-group">
+                        <label for="project-pricing">Pricing Model *</label>
+                        <select id="project-pricing" name="pricingModel" required>
+                            <option value="">Select pricing model</option>
+                            <option value="free">Completely Free (all tools have free tier)</option>
+                            <option value="partial">Partially Paid (mix of free and paid tools)</option>
+                            <option value="paid">Fully Paid (no free tier available)</option>
+                        </select>
+                        <span class="form-hint">This helps users know if they need paid subscriptions to recreate
+                            this</span>
+                    </div>
 
                     <!-- SUBMIT -->
                     <button type="submit" class="btn-submit">
@@ -250,11 +270,13 @@
                             <label for="idea-category">Category</label>
                             <select id="idea-category" name="category">
                                 <option value="">Select category</option>
-                                <option value="Feature Request">Feature Request</option>
-                                <option value="New Page">New Page</option>
-                                <option value="Design Idea">Design Idea</option>
-                                <option value="Tool Suggestion">Tool Suggestion</option>
-                                <option value="Other">Other</option>
+                                <option value="app">App</option>
+                                <option value="game">Game</option>
+                                <option value="tool">Tool</option>
+                                <option value="website">Website</option>
+                                <option value="extension">Extension</option>
+                                <option value="bot">Bot</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
 
