@@ -2,188 +2,216 @@
    mobile-spotlight.js - Mobile Hover Simulator
    ============================================
    
-   📱 MOBILE SPOTLIGHT SYSTEM
+   📱 MOBILE SPOTLIGHT SYSTEM v3
    
-   Simulates hover effects on mobile by treating
-   the center of the screen as a "spotlight".
-   
-   HOW IT WORKS:
-   - Vertical scroll: horizontal center line is the spotlight
-   - Horizontal scroll: vertical center line is the spotlight
-   - Elements passing through spotlight get hover class
-   
-   ONLY ACTIVE ON MOBILE/TOUCH DEVICES
+   Rules:
+   - Invisible 1rem (16px) diameter spotlight
+   - Vertical scroll: spotlight at screen center
+   - Carousel scroll: spotlight at carousel's vertical center
+   - Spotlight disabled when user PRESSES something
+   - Spotlight re-enables when user SCROLLS again
+   - Only ONE spotlight active at a time
+   - NOT active on submit page
    
    ============================================ */
 
 
-/**
- * Mobile Spotlight System
- */
 const MobileSpotlight = {
 
-    // Elements that should respond to spotlight
+    // Elements that respond to spotlight
     spotlightSelectors: [
         '.project-card-v2',
         '.project-card',
         '.term-card',
         '.tool-card',
         '.tile',
-        '.carousel-item',
-        '.nav-btn-join',
-        '.btn',
+        '.feature-card',
+        '.model-card',
+        '.glass',
+        '.hero-external-link',
         '.btn-primary',
-        '.btn-secondary',
-        '.hero-external-link'
+        '.btn-secondary'
     ],
 
-    // Class added when element is in spotlight
+    // Class added when in spotlight
     spotlightClass: 'spotlight-hover',
 
-    // Track currently spotlighted elements
+    // State
     currentSpotlighted: new Set(),
-
-    // Scroll tracking
-    lastScrollY: 0,
-    lastScrollX: 0,
-    scrollDirection: 'vertical',
-    horizontalContainers: [],
+    activeCarousel: null,
+    scrollMode: 'vertical',
+    spotlightRadius: 8, // 1rem diameter = 16px, radius = 8px
+    spotlightEnabled: true, // Disabled on press, enabled on scroll
 
 
     /**
-     * Initialize the spotlight system
+     * Initialize
      */
     init() {
-        // Only run on touch devices
-        if (!this.isTouchDevice()) {
+        // Skip non-touch devices
+        if (!this.isTouchDevice()) return;
+
+        // Skip submit page
+        if (window.location.pathname.includes('submit')) {
+            console.log('📱 Spotlight: disabled on submit page');
             return;
         }
 
-        console.log('📱 Mobile Spotlight initialized');
+        console.log('📱 Spotlight v3: initialized');
 
-        // Find horizontal scroll containers
-        this.findHorizontalContainers();
+        // Find all carousels
+        this.carousels = document.querySelectorAll('.carousel-track');
 
-        // Add scroll listeners
-        this.addScrollListeners();
-
-        // Initial spotlight check
+        this.addListeners();
         this.updateSpotlight();
     },
 
 
     /**
-     * Check if device is touch-enabled
+     * Check if touch device
      */
     isTouchDevice() {
         return ('ontouchstart' in window) ||
             (navigator.maxTouchPoints > 0) ||
-            (navigator.msMaxTouchPoints > 0) ||
             (window.innerWidth <= 768);
     },
 
 
     /**
-     * Find all horizontal scroll containers
+     * Add event listeners
      */
-    findHorizontalContainers() {
-        // Carousels and other horizontal scrollers
-        const containers = document.querySelectorAll(
-            '.carousel-track, .carousel-container, [data-horizontal-scroll]'
-        );
-        this.horizontalContainers = Array.from(containers);
-    },
+    addListeners() {
+        // === PRESS DETECTION - Disable spotlight ===
+        document.addEventListener('touchstart', (e) => {
+            // Check if touching an interactive element
+            const target = e.target.closest('a, button, .project-card-v2, .tool-card, .term-card');
+            if (target) {
+                this.spotlightEnabled = false;
+                this.clearAllSpotlights();
+            }
+        }, { passive: true });
 
+        // === VERTICAL SCROLL - Enable spotlight ===
+        window.addEventListener('scroll', () => {
+            this.spotlightEnabled = true;
+            this.scrollMode = 'vertical';
+            this.activeCarousel = null;
+            this.updateSpotlight();
+        }, { passive: true });
 
-    /**
-     * Add scroll event listeners
-     */
-    addScrollListeners() {
-        // Debounced scroll handler
-        let scrollTimeout;
-        const handleScroll = () => {
-            if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
-            scrollTimeout = requestAnimationFrame(() => {
-                this.scrollDirection = 'vertical';
+        // === CAROUSEL SCROLL - Enable and focus on that carousel ===
+        this.carousels.forEach(carousel => {
+            carousel.addEventListener('scroll', () => {
+                this.spotlightEnabled = true;
+                this.scrollMode = 'horizontal';
+                this.activeCarousel = carousel;
                 this.updateSpotlight();
-            });
-        };
-
-        // Vertical scroll (main page)
-        window.addEventListener('scroll', handleScroll, { passive: true });
-
-        // Horizontal scroll (carousels)
-        this.horizontalContainers.forEach(container => {
-            container.addEventListener('scroll', () => {
-                if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
-                scrollTimeout = requestAnimationFrame(() => {
-                    this.scrollDirection = 'horizontal';
-                    this.activeHorizontalContainer = container;
-                    this.updateSpotlight();
-                });
             }, { passive: true });
         });
 
-        // Also check on touch move for smoother feel
+        // === TOUCH MOVE - Update while scrolling ===
         document.addEventListener('touchmove', () => {
-            if (scrollTimeout) cancelAnimationFrame(scrollTimeout);
-            scrollTimeout = requestAnimationFrame(() => {
+            if (this.spotlightEnabled) {
                 this.updateSpotlight();
-            });
+            }
         }, { passive: true });
     },
 
 
     /**
-     * Update which elements are in the spotlight
+     * Clear all spotlights
+     */
+    clearAllSpotlights() {
+        this.currentSpotlighted.forEach(el => {
+            el.classList.remove(this.spotlightClass);
+        });
+        this.currentSpotlighted.clear();
+    },
+
+
+    /**
+     * Get spotlight position based on mode
+     */
+    getSpotlightPosition() {
+        const centerX = window.innerWidth / 2;
+
+        if (this.scrollMode === 'horizontal' && this.activeCarousel) {
+            // Carousel mode: X = screen center, Y = carousel's vertical center
+            const carouselRect = this.activeCarousel.getBoundingClientRect();
+            const carouselCenterY = carouselRect.top + carouselRect.height / 2;
+            return { x: centerX, y: carouselCenterY };
+        } else {
+            // Vertical mode: X = screen center, Y = screen center
+            const centerY = window.innerHeight / 2;
+            return { x: centerX, y: centerY };
+        }
+    },
+
+
+    /**
+     * Update spotlight - check elements
      */
     updateSpotlight() {
-        // Get viewport center
-        const viewportCenterX = window.innerWidth / 2;
-        const viewportCenterY = window.innerHeight / 2;
+        // Don't update if disabled
+        if (!this.spotlightEnabled) return;
 
-        // Spotlight zone (percentage of viewport)
-        const spotlightZoneY = window.innerHeight * 0.15; // 15% buffer above/below center
-        const spotlightZoneX = window.innerWidth * 0.20; // 20% buffer left/right of center
+        const spotlight = this.getSpotlightPosition();
+        const radius = this.spotlightRadius;
 
-        // Get all spotlight-able elements
-        const elements = document.querySelectorAll(this.spotlightSelectors.join(','));
+        // Determine which elements to check
+        let elements;
+        if (this.scrollMode === 'horizontal' && this.activeCarousel) {
+            // Only check elements in active carousel
+            elements = this.activeCarousel.querySelectorAll(this.spotlightSelectors.join(','));
 
-        elements.forEach(element => {
-            const rect = element.getBoundingClientRect();
-            const elementCenterX = rect.left + rect.width / 2;
-            const elementCenterY = rect.top + rect.height / 2;
+            // Clear spotlight from elements NOT in active carousel
+            this.currentSpotlighted.forEach(el => {
+                if (!this.activeCarousel.contains(el)) {
+                    el.classList.remove(this.spotlightClass);
+                    this.currentSpotlighted.delete(el);
+                }
+            });
+        } else {
+            // Check all page elements
+            elements = document.querySelectorAll(this.spotlightSelectors.join(','));
+        }
 
-            let isInSpotlight = false;
+        // Check each element
+        elements.forEach(el => {
+            const rect = el.getBoundingClientRect();
 
-            if (this.scrollDirection === 'vertical') {
-                // Vertical scroll: check if element center is near horizontal center line
-                isInSpotlight = (
-                    elementCenterY > (viewportCenterY - spotlightZoneY) &&
-                    elementCenterY < (viewportCenterY + spotlightZoneY) &&
-                    rect.left < window.innerWidth &&
-                    rect.right > 0
-                );
-            } else {
-                // Horizontal scroll: check if element center is near vertical center line
-                isInSpotlight = (
-                    elementCenterX > (viewportCenterX - spotlightZoneX) &&
-                    elementCenterX < (viewportCenterX + spotlightZoneX) &&
-                    rect.top < window.innerHeight &&
-                    rect.bottom > 0
-                );
+            // Skip off-screen elements
+            if (rect.bottom < 0 || rect.top > window.innerHeight) {
+                if (this.currentSpotlighted.has(el)) {
+                    el.classList.remove(this.spotlightClass);
+                    this.currentSpotlighted.delete(el);
+                }
+                return;
             }
 
-            // Apply or remove spotlight class
-            if (isInSpotlight) {
-                if (!this.currentSpotlighted.has(element)) {
-                    element.classList.add(this.spotlightClass);
-                    this.currentSpotlighted.add(element);
+            const elCenterX = rect.left + rect.width / 2;
+            const elCenterY = rect.top + rect.height / 2;
+
+            // Distance from spotlight center to element center
+            const distance = Math.sqrt(
+                Math.pow(elCenterX - spotlight.x, 2) +
+                Math.pow(elCenterY - spotlight.y, 2)
+            );
+
+            // Element is in spotlight if overlap exists
+            const elRadius = Math.max(rect.width, rect.height) / 2;
+            const inSpotlight = distance < (elRadius + radius);
+
+            // Apply or remove class
+            if (inSpotlight) {
+                if (!this.currentSpotlighted.has(el)) {
+                    el.classList.add(this.spotlightClass);
+                    this.currentSpotlighted.add(el);
                 }
             } else {
-                if (this.currentSpotlighted.has(element)) {
-                    element.classList.remove(this.spotlightClass);
-                    this.currentSpotlighted.delete(element);
+                if (this.currentSpotlighted.has(el)) {
+                    el.classList.remove(this.spotlightClass);
+                    this.currentSpotlighted.delete(el);
                 }
             }
         });
@@ -191,10 +219,10 @@ const MobileSpotlight = {
 
 
     /**
-     * Manually refresh (call after DOM changes)
+     * Refresh after DOM changes
      */
     refresh() {
-        this.findHorizontalContainers();
+        this.carousels = document.querySelectorAll('.carousel-track');
         this.updateSpotlight();
     }
 };
@@ -205,10 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
     MobileSpotlight.init();
 });
 
-// Re-initialize after dynamic content loads
+// Refresh after load
 window.addEventListener('load', () => {
     setTimeout(() => MobileSpotlight.refresh(), 500);
 });
 
-// Make available globally
+// Global access
 window.MobileSpotlight = MobileSpotlight;

@@ -314,3 +314,15 @@
     text-transform: uppercase;
     margin-left: auto;
 }
+
+/* ========================================
+   SAVED STATE - Filled bookmark
+   ======================================== */
+.project-card-v2 .card-icon.stat-save.saved {
+    color: #f472b6;
+    background: rgba(244, 114, 182, 0.15);
+}
+
+.project-card-v2 .card-icon.stat-save.saved:hover {
+    background: rgba(244, 114, 182, 0.25);
+}

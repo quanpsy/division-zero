@@ -7,7 +7,7 @@
    Handles:
    - Project form validation
    - Tile/chip selection for tools and stack
-   - Form submission
+   - Form submission to Discord webhook
    
    ============================================ */
 
@@ -202,7 +202,7 @@ async function handleProjectSubmit(e) {
         }
     });
 
-    // Also validate logo URL (even though required validation passed)
+    // Also validate logo URL
     const logoInput = form.querySelector('#project-logo');
     if (logoInput && !validateProjectInput(logoInput)) {
         isValid = false;
@@ -239,14 +239,14 @@ async function handleProjectSubmit(e) {
 
     // Build schema-compliant JSON
     const projectData = {
-        // Section 1: User Submitted
         name: rawData.name || '',
         description: rawData.description || '',
         category: rawData.category || '',
         builder: {
             name: rawData.builderName || '',
             discord: rawData.discord || '',
-            profileUrl: rawData.profileUrl || ''
+            profileUrl: rawData.profileUrl || '',
+            email: rawData.email || ''
         },
         originalUrl: rawData.url || '',
         githubRepo: rawData.github || '',
@@ -256,27 +256,115 @@ async function handleProjectSubmit(e) {
         pricingModel: rawData.pricingModel || 'free'
     };
 
-    console.log('Project submission (schema-compliant):', projectData);
+    console.log('Submitting project to Discord:', projectData);
 
-    // Submit to webhook if configured
-    if (CONFIG.SUBMIT_WEBHOOK_URL) {
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            utils.showToast('Project submitted successfully!');
+    // Submit to Discord webhook (bot handles approval and Supabase insert)
+    if (window.submitProjectToDiscord) {
+        const result = await submitProjectToDiscord(projectData);
+
+        if (result.success && result.secretKey) {
+            // Show secret key modal instead of just a toast
+            showSecretKeyModal(result.secretKey);
             form.reset();
             resetProjectTiles(form);
-        } catch (error) {
-            utils.showToast('Submission failed. Please try again.');
+        } else if (result.success) {
+            utils.showToast('🎉 Project submitted for review!');
+            form.reset();
+            resetProjectTiles(form);
+        } else {
+            utils.showToast(result.message || 'Submission failed. Please try again.');
         }
     } else {
-        utils.showToast('Submission received! (Demo mode)');
-        form.reset();
-        resetProjectTiles(form);
+        console.error('Discord webhook client not loaded');
+        utils.showToast('Submission system not available. Please try again later.');
     }
 
     // Re-enable button
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Project';
+}
+
+
+/**
+ * Show secret key modal to user
+ * @param {string} secretKey - The 12-char secret key
+ */
+function showSecretKeyModal(secretKey) {
+    // Create modal overlay
+    const overlay = document.createElement('div');
+    overlay.className = 'key-modal-overlay';
+    overlay.id = 'key-modal-overlay';
+
+    overlay.innerHTML = `
+        <div class="key-modal">
+            <div class="key-modal-icon">🎉</div>
+            <h2 class="key-modal-title">Project Submitted!</h2>
+            <p class="key-modal-subtitle">
+                Your project is now pending review. Save your secret key below - 
+                you'll need it to contact us about your project.
+            </p>
+            
+            <div class="key-display">
+                <span class="key-value" id="key-value">${secretKey}</span>
+                <button class="key-copy-btn" id="key-copy-btn">
+                    📋 Copy
+                </button>
+            </div>
+            
+            <div class="key-warning">
+                <span class="key-warning-icon">⚠️</span>
+                <span>
+                    <strong>Save this key now!</strong> This is the only time you'll see it. 
+                    We cannot recover lost keys.
+                </span>
+            </div>
+            
+            <button class="key-noted-btn" id="key-noted-btn">
+                ✓ I've Saved My Key
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Show with animation
+    requestAnimationFrame(() => {
+        overlay.classList.add('active');
+    });
+
+    // Copy button handler
+    const copyBtn = document.getElementById('key-copy-btn');
+    copyBtn.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(secretKey);
+            copyBtn.innerHTML = '✓ Copied!';
+            copyBtn.classList.add('copied');
+            setTimeout(() => {
+                copyBtn.innerHTML = '📋 Copy';
+                copyBtn.classList.remove('copied');
+            }, 2000);
+        } catch (err) {
+            // Fallback for older browsers
+            const keyValue = document.getElementById('key-value');
+            const range = document.createRange();
+            range.selectNode(keyValue);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            copyBtn.innerHTML = '✓ Copied!';
+            copyBtn.classList.add('copied');
+        }
+    });
+
+    // Noted button handler - only way to close
+    const notedBtn = document.getElementById('key-noted-btn');
+    notedBtn.addEventListener('click', () => {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            overlay.remove();
+        }, 300);
+    });
 }
 
 

@@ -32,6 +32,8 @@ function createProjectCardV2(project = {}) {
         logo = 'https://via.placeholder.com/80x80/8b5cf6/ffffff?text=?',
         // New schema fields with backwards compat
         originalUrl = project.vercelUrl || '#',
+        // Proxy URL for view counting (camelCase from Worker, falls back to originalUrl)
+        proxyUrl = project.proxyUrl || project.originalUrl || originalUrl,
         views = 0,
         tags = [],
         tools = [],
@@ -44,7 +46,9 @@ function createProjectCardV2(project = {}) {
         promoted = false,
         isNew = false,
         // Pricing model: free | partial | paid
-        pricingModel = 'free'
+        pricingModel = 'free',
+        // ID for saving
+        id = project.slug || ''
     } = project;
 
     // Handle builder as string (old) or object (new)
@@ -114,7 +118,8 @@ function createProjectCardV2(project = {}) {
     const shareHTML = `
         <button class="card-icon stat-share" 
                 title="Share Project"
-                onclick="shareProject('${name}', '${originalUrl}')">
+                data-share-url="${proxyUrl}"
+                data-share-name="${name.replace(/"/g, '&quot;')}">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="18" cy="5" r="3"></circle>
                 <circle cx="6" cy="12" r="3"></circle>
@@ -130,11 +135,16 @@ function createProjectCardV2(project = {}) {
     // SAVE BUTTON - Instagram-style bookmark
     // ========================================
 
+    // Check if project is saved in localStorage
+    const savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+    const isSaved = savedProjects.includes(id);
+
     const saveHTML = `
-        <button class="card-icon stat-save" 
-                title="Save Project"
-                onclick="saveProject('${name}')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <button class="card-icon stat-save ${isSaved ? 'saved' : ''}" 
+                title="${isSaved ? 'Unsave' : 'Save'} Project"
+                data-project-id="${id}"
+                data-project-name="${name.replace(/"/g, '&quot;')}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="${isSaved ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2">
                 <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
             </svg>
         </button>
@@ -196,7 +206,7 @@ function createProjectCardV2(project = {}) {
     // ========================================
 
     return `
-        <article class="project-card-v2" style="--glow-color: ${glowColor}">
+        <article class="project-card-v2" style="--glow-color: ${glowColor}" data-project-name="${name.replace(/"/g, '&quot;')}" data-project-id="${project.publicId || project.id || ''}" data-project-url="${originalUrl}" data-builder-discord="${typeof builder === 'object' ? (builder.discord || '') : ''}">
             <div class="card-wrapper">
             
                 <!-- TOP: Badge -->
@@ -209,9 +219,9 @@ function createProjectCardV2(project = {}) {
                 
                     <!-- Left: Logo -->
                     <div class="card-left">
-                        <a href="${originalUrl}" target="_blank" rel="noopener noreferrer" class="card-logo-link">
+                        <a href="${proxyUrl}" target="_blank" rel="noopener noreferrer" class="card-logo-link">
                             <div class="card-logo">
-                                <img src="${logo}" alt="${name} logo" loading="lazy">
+                                <img src="${logo}" alt="${name} logo" loading="lazy" onerror="this.onerror=null; this.src='/assets/images/white-logo.svg'">
                             </div>
                         </a>
                     </div>
@@ -220,7 +230,7 @@ function createProjectCardV2(project = {}) {
                     <div class="card-info">
                     
                         <!-- Title -->
-                        <a href="${originalUrl}" target="_blank" rel="noopener noreferrer" class="card-title-link">
+                        <a href="${proxyUrl}" target="_blank" rel="noopener noreferrer" class="card-title-link">
                             <h3 class="card-title">${name}</h3>
                         </a>
                         
@@ -264,3 +274,224 @@ function createProjectCardV2(project = {}) {
 
 // Make functions available globally
 window.createProjectCardV2 = createProjectCardV2;
+
+/**
+ * Initialize long-press reporting on project cards
+ * Call this after cards are rendered
+ */
+function initProjectCardReporting() {
+    const cards = document.querySelectorAll('.project-card-v2');
+
+    cards.forEach(card => {
+        let pressTimer = null;
+        let isLongPress = false;
+
+        const startPress = (e) => {
+            // Don't trigger on links or buttons
+            if (e.target.closest('a, button')) return;
+
+            isLongPress = false;
+            pressTimer = setTimeout(() => {
+                isLongPress = true;
+                handleReport(card);
+            }, 1500); // 1.5 seconds
+        };
+
+        const cancelPress = () => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        };
+
+        // Mouse events
+        card.addEventListener('mousedown', startPress);
+        card.addEventListener('mouseup', cancelPress);
+        card.addEventListener('mouseleave', cancelPress);
+
+        // Touch events
+        card.addEventListener('touchstart', startPress, { passive: true });
+        card.addEventListener('touchend', cancelPress);
+        card.addEventListener('touchcancel', cancelPress);
+    });
+}
+
+/**
+ * Handle reporting a project
+ */
+async function handleReport(card) {
+    const projectInfo = {
+        name: card.dataset.projectName || 'Unknown',
+        publicId: card.dataset.projectId || 'N/A',
+        url: card.dataset.projectUrl || '',
+        builderDiscord: card.dataset.builderDiscord || ''
+    };
+
+    // Visual feedback - brief flash
+    card.style.boxShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
+    setTimeout(() => {
+        card.style.boxShadow = '';
+    }, 500);
+
+    // Send to Discord
+    if (window.sendReportToDiscord) {
+        const result = await sendReportToDiscord(projectInfo);
+        if (result.success) {
+            utils.showToast('📩 Report sent! Thanks for helping.');
+        } else {
+            utils.showToast('Failed to send report. Try again.');
+        }
+    }
+}
+
+
+// ============================================
+// SHARE & SAVE BUTTON HANDLERS
+// ============================================
+
+/**
+ * Initialize share and save button handlers
+ * Call this after cards are rendered
+ */
+function initProjectCardButtons() {
+    // Share buttons
+    document.querySelectorAll('.stat-share').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const url = btn.dataset.shareUrl;
+            const name = btn.dataset.shareName;
+
+            try {
+                await navigator.clipboard.writeText(url);
+                utils.showToast(`📋 Link copied: ${name}`);
+            } catch (err) {
+                utils.showToast('Failed to copy link');
+            }
+        });
+    });
+
+    // Save buttons
+    document.querySelectorAll('.stat-save').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            const projectId = btn.dataset.projectId;
+            const projectName = btn.dataset.projectName;
+            const card = btn.closest('.project-card-v2');
+
+            if (!projectId) return;
+
+            // Get saved projects from localStorage
+            let savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+
+            const isSaved = savedProjects.includes(projectId);
+
+            if (isSaved) {
+                // Remove from saved
+                savedProjects = savedProjects.filter(id => id !== projectId);
+                btn.classList.remove('saved');
+                btn.querySelector('svg').setAttribute('fill', 'none');
+                btn.title = 'Bookmark';
+                utils.showToast(`🔖 Removed: ${projectName}`);
+
+                // Remove from Saved carousel
+                removeFromSavedCarousel(projectId);
+            } else {
+                // Add to saved
+                savedProjects.push(projectId);
+                btn.classList.add('saved');
+                btn.querySelector('svg').setAttribute('fill', 'currentColor');
+                btn.title = 'Remove Bookmark';
+                utils.showToast(`❤️ Bookmarked: ${projectName}`);
+
+                // Add to Saved carousel (clone the card)
+                addToSavedCarousel(card, projectId);
+            }
+
+            // Update localStorage
+            localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
+        });
+    });
+}
+
+
+/**
+ * Add a project card to the Saved carousel
+ */
+function addToSavedCarousel(card, projectId) {
+    let savedSection = document.getElementById('carousel-saved');
+
+    // Create the saved carousel if it doesn't exist
+    if (!savedSection) {
+        const container = document.getElementById('projects-container');
+        if (!container) return;
+
+        savedSection = document.createElement('section');
+        savedSection.id = 'carousel-saved';
+        savedSection.className = 'category-section';
+        savedSection.innerHTML = `
+            <div class="category-header">
+                <h2 class="category-title">❤️ Your Bookmarks</h2>
+            </div>
+            <div class="carousel-wrapper">
+                <div class="carousel-track" id="saved-track"></div>
+            </div>
+        `;
+        container.appendChild(savedSection);
+    }
+
+    // Clone the card and add to saved track
+    const track = savedSection.querySelector('.carousel-track') || savedSection.querySelector('#saved-track');
+    if (track) {
+        const clone = card.cloneNode(true);
+        clone.dataset.savedId = projectId;
+
+        // Update the save button in the clone to be already saved
+        const cloneSaveBtn = clone.querySelector('.stat-save');
+        if (cloneSaveBtn) {
+            cloneSaveBtn.classList.add('saved');
+            cloneSaveBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+        }
+
+        track.appendChild(clone);
+
+        // Re-initialize button handlers for the new clone
+        initProjectCardButtons();
+    }
+}
+
+
+/**
+ * Remove a project card from the Saved carousel
+ */
+function removeFromSavedCarousel(projectId) {
+    const savedSection = document.getElementById('carousel-saved');
+    if (!savedSection) return;
+
+    // Find and remove the card with this projectId
+    const cards = savedSection.querySelectorAll(`[data-saved-id="${projectId}"], [data-project-id="${projectId}"]`);
+    cards.forEach(card => card.remove());
+
+    // If no more saved items, remove the whole section
+    const track = savedSection.querySelector('.carousel-track') || savedSection.querySelector('#saved-track');
+    if (track && track.children.length === 0) {
+        savedSection.remove();
+    }
+}
+
+
+/**
+ * Get saved project IDs from localStorage
+ */
+function getSavedProjectIds() {
+    return JSON.parse(localStorage.getItem('savedProjects') || '[]');
+}
+
+
+// Make functions available globally
+window.initProjectCardReporting = initProjectCardReporting;
+window.initProjectCardButtons = initProjectCardButtons;
+window.getSavedProjectIds = getSavedProjectIds;

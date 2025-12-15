@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ============================================
+         Division Zero - Home Page
+         ============================================
+         This is the main landing page.
+         
+         SECTIONS:
+         1. Hero - Main title + CTA buttons
+         2. Features - What we offer
+         3. Model - How it works
+         4. Stats - Key numbers
+         5. Join - Call to action
+         ============================================ -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="divisionzero - Where ideas become reality through AI. Discover vibecoding projects, tools, and resources for building with AI assistants.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="divisionzero - Vibecoding Community">
+    <meta property="og:description"
+        content="Where ideas become reality through AI. Discover vibecoding projects and tools.">
+    <meta property="og:type" content="website">
+
+    <title>divisionzero - Where Ideas Become Reality Through AI</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/assets/images/white-logo.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- ========================================
+         CSS FILES
+         Load order matters! Foundation first.
+         ======================================== -->
+
+    <!-- Foundation -->
+    <!-- Layout -->
+    <!-- Components -->
+    <!-- Pods -->
+    <!-- Utils -->
+        <!-- CSS Bundle -->
+    <link rel="stylesheet" href="styles.min.css">
+</head>
+
+<body>
+
+    <!-- ========================================
+         NAVIGATION
+         Rendered by JavaScript (nav.js)
+         data-page: Sets active nav link
+         ======================================== -->
+    <div id="nav-placeholder" data-page="home"></div>
+
+
+    <!-- ========================================
+         HERO SECTION
+         Main title, subtitle, CTA buttons, logo
+         ======================================== -->
+    <section class="hero">
+
+        <!-- Background glow effect -->
+        <div class="hero-bg" aria-hidden="true"></div>
+
+        <div class="container">
+            <div class="hero-content">
+
+                <!-- TEXT COLUMN -->
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">Vibecoding</span><br>
+                        Is Art
+                    </h1>
+                    <p class="hero-subtitle">
+                        This is what happens when curiosity meets AI. Join
+                        thousands of vibecoders building what others can't imagine.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="projects.html" class="btn-primary btn-large">
+                            Explore Projects
+                            <span class="btn-icon">→</span>
+                        </a>
+                        <a href="tools.html" class="btn-secondary btn-large">
+                            View Tools
+                        </a>
+                    </div>
+                </div>
+
+                <!-- LOGO COLUMN -->
+                <div class="hero-logo">
+                    <img src="assets/images/white-logo.svg" alt="divisionzero logo" class="logo-hero">
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator" aria-hidden="true">
+            <div class="scroll-line"></div>
+        </div>
+
+    </section>
+
+
+    <!-- ========================================
+         FEATURES SECTION
+         What divisionzero offers
+         ======================================== -->
+    <section class="section">
+        <div class="container">
+
+            <!-- Section header -->
+            <div class="section-header">
+                <span class="section-tag">Start Here</span>
+                <h2 class="section-title">Everything You Need to <span class="gradient-text">Start Building</span></h2>
+                <p class="section-description">
+                    From inspiration to deployment, we've got you covered.
+                </p>
+            </div>
+
+            <!-- Features grid -->
+            <div class="features-grid">
+
+                <!-- Feature 1: Browse & Learn -->
+                <div class="feature-card glass">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Browse & Learn</h3>
+                    <p class="feature-description">
+                        Explore hundreds of projects built by vibecoders. See what's possible
+                        and get inspired for your own creations.
+                    </p>
+                </div>
+
+                <!-- Feature 2: Tools Guide -->
+                <div class="feature-card glass">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Tools Guide</h3>
+                    <p class="feature-description">
+                        Curated list of AI tools, frameworks, and platforms. Know exactly
+                        which tools to use for your project.
+                    </p>
+                </div>
+
+                <!-- Feature 3: Vibecoder's Dictionary -->
+                <div class="feature-card glass">
+                    <div class="feature-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Vibecoder's Dictionary</h3>
+                    <p class="feature-description">
+                        Learn the language. Every term you need to know, with AI prompts
+                        to help you implement them.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         MODEL SECTION
+         How vibecoding works
+         ======================================== -->
+    <section class="section section-dark">
+        <div class="container">
+
+            <!-- Section header -->
+            <div class="section-header">
+                <span class="section-tag">How It Works</span>
+                <h2 class="section-title">Build Without <span class="gradient-text">Writing Code</span></h2>
+            </div>
+
+            <!-- Model grid -->
+            <div class="model-grid">
+
+                <!-- Step 1 -->
+                <div class="model-card glass">
+                    <span class="model-number">01</span>
+                    <h3 class="model-title">Describe Your Idea</h3>
+                    <p class="model-description">
+                        Tell an AI what you want to build in plain English.
+                        <strong>"Make me a task manager with categories and due dates."</strong>
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="model-card glass">
+                    <span class="model-number">02</span>
+                    <h3 class="model-title">AI Writes the Code</h3>
+                    <p class="model-description">
+                        Claude, ChatGPT, or Cursor generates working code.
+                        <strong>You iterate by describing what to change.</strong>
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="model-card glass">
+                    <span class="model-number">03</span>
+                    <h3 class="model-title">Deploy & Share</h3>
+                    <p class="model-description">
+                        Push to Vercel or Netlify with one click.
+                        <strong>Your app is live for the world to use.</strong>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         STATS SECTION
+         Key numbers
+         ======================================== -->
+    <section class="section">
+        <div class="container">
+            <div class="stats-grid">
+
+                <div class="stat-item">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Possibilities</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Code Experience Required</div>
+                </div>
+
+                <div class="stat-item">
+                    <div class="stat-value">1</div>
+                    <div class="stat-label">Community</div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         JOIN SECTION
+         Call to action
+         ======================================== -->
+    <section class="section section-dark">
+        <div class="container">
+
+            <div class="join-card">
+                <img src="assets/images/white-logo.svg" alt="divisionzero" class="join-logo">
+                <h2 class="join-title">Join <span class="gradient-text">divisionzero</span></h2>
+                <p class="join-description">
+                    Connect with vibecoders, share your projects, get feedback,
+                    and build together. The community is waiting for you.
+                </p>
+                <div class="join-cta">
+                    <a href="https://discord.gg/SXJS4S7jUE" target="_blank" rel="noopener noreferrer"
+                        class="btn-primary btn-large">
+                        Join Discord
+                        <span class="btn-icon">→</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         VOCABULARY TERM ROWS
+         3 scrolling rows with tooltips
+         ======================================== -->
+    <section class="term-scroll-section section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Learn the Language</span>
+                <h2 class="section-title">Vibecoder <span class="gradient-text">Vocabulary</span></h2>
+            </div>
+        </div>
+        <div class="term-scroll-container" id="term-scroll-container">
+            <!-- Term rows rendered by JS -->
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         STACK LOGO LOOP
+         Infinite scrolling tool icons (decorative)
+         ======================================== -->
+    <section class="logo-scroll-section">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <p class="section-description" style="margin-bottom: 0;">
+                    Built with the tools you love
+                </p>
+            </div>
+        </div>
+        <div class="logo-scroll-wrapper">
+            <div class="logo-scroll-track" id="logo-scroll-track">
+                <!-- Logos rendered by JS -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         FOOTER
+         Rendered by JavaScript (footer.js)
+         ======================================== -->
+    <div id="footer-placeholder"></div>
+
+
+    <!-- ========================================
+         JAVASCRIPT FILES
+         Load order: config → utils → components → pods → pages
+         ======================================== -->
+
+    <!-- Config & Utilities -->
+    <!-- Components -->
+    <!-- Pods -->
+    <!-- Page Script -->    <!-- JS Bundle -->
+    <script src="app.min.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW error:', err));
+            });
+        }
+    </script>
+</body>
+
+</html>

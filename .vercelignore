@@ -1,0 +1,37 @@
+# ============================================
+# VERCEL IGNORE FILE
+# ============================================
+# Vercel will deploy dist/ folder (production build)
+# Everything else is ignored
+
+# Source files (use dist/ instead)
+js/
+css/
+*.html
+
+# Bot (runs separately)
+bot/
+
+# Schemas and docs
+schemas/
+
+# Worker (deployed separately)
+worker/
+
+# Build files
+esbuild.config.js
+package.json
+package-lock.json
+node_modules/
+
+# Local
+*.bat
+.env
+.env.local
+.git/
+.gitignore
+
+# Other
+*.log
+.DS_Store
+Thumbs.db

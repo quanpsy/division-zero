@@ -48,6 +48,10 @@
     width: max-content;
     /* Allow tooltips to overflow */
     overflow: visible;
+    /* Smooth animation */
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 /* Second row - slightly different speed */
@@ -71,13 +75,13 @@
     }
 
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-33.33%);
     }
 }
 
 @keyframes term-scroll-right {
     0% {
-        transform: translateX(-50%);
+        transform: translateX(-33.33%);
     }
 
     100% {
@@ -135,7 +139,7 @@
     position: absolute;
     bottom: calc(100% + 12px);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-33.33%);
     width: 300px;
     min-height: 100px;
     height: auto;
@@ -159,7 +163,7 @@
     position: absolute;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-33.33%);
     border: 8px solid transparent;
     border-top-color: rgba(20, 20, 30, 0.98);
 }
@@ -209,6 +213,8 @@
     height: 70px;
     overflow: hidden;
     position: relative;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 /* Fade edges for seamless look */
@@ -237,8 +243,9 @@
     display: flex;
     gap: 3rem;
     align-items: center;
-    animation: logo-scroll 35s linear infinite;
+    animation: logo-scroll 30s linear infinite;
     width: fit-content;
+    will-change: transform;
 }
 
 @keyframes logo-scroll {
@@ -247,7 +254,7 @@
     }
 
     100% {
-        transform: translateX(-50%);
+        transform: translateX(-33.33%);
     }
 }
 
@@ -255,15 +262,29 @@
 .logo-scroll-track img {
     height: 36px;
     width: auto;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+    opacity: 0.6;
+    transition: all 0.3s ease;
     pointer-events: none;
     user-select: none;
 }
 
-/* Subtle glow on scroll hover (affects all) */
+/* Invert dark-only logos (Vercel, GitHub, Next.js, Anthropic, Cursor) */
+.logo-scroll-track img[alt='Vercel'],
+.logo-scroll-track img[alt='GitHub'],
+/* Next.js removed - already white */ .logo-scroll-track img[alt='REMOVED'] {
+    filter: brightness(0) invert(1);
+}
+
+/* Full color on hover */
 .logo-scroll-wrapper:hover .logo-scroll-track img {
     opacity: 1;
+}
+
+/* Keep inverted icons inverted on hover */
+.logo-scroll-wrapper:hover .logo-scroll-track img[alt='Vercel'],
+.logo-scroll-wrapper:hover .logo-scroll-track img[alt='GitHub'],
+.logo-scroll-wrapper:hover /* Next.js removed - already white */ .logo-scroll-track img[alt='REMOVED'] {
+    filter: brightness(0) invert(1);
 }
 
 

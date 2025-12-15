@@ -40,7 +40,7 @@ function renderFooter() {
                 <div class="footer-content">
                     
                     <!-- LOGO -->
-                    <img src="assets/images/white-logo.png" 
+                    <img src="assets/images/white-logo.svg" 
                          alt="${CONFIG.SITE_NAME}" 
                          class="logo-footer">
                     

@@ -52,8 +52,8 @@ async function renderTermRows() {
         row.className = 'term-scroll-row' + (index === 2 ? ' reverse' : '');
         row.id = `term-row-${index + 1}`;
 
-        // Duplicate terms for seamless loop
-        const pills = [...rowTerms, ...rowTerms].map(term => createTermPillWithTooltip(term)).join('');
+        // Triple duplicate terms for seamless loop
+        const pills = [...rowTerms, ...rowTerms, ...rowTerms].map(term => createTermPillWithTooltip(term)).join('');
         row.innerHTML = pills;
 
         container.appendChild(row);
@@ -102,8 +102,8 @@ async function renderLogoLoop() {
     // Combine tools and stacks
     const allIcons = [...(data.tools || []), ...(data.stacks || [])];
 
-    // Create image elements (duplicated for seamless loop)
-    const iconsHTML = [...allIcons, ...allIcons].map(item =>
+    // Create image elements (tripled for seamless loop)
+    const iconsHTML = [...allIcons, ...allIcons, ...allIcons].map(item =>
         `<img src="${item.icon}" alt="${item.name}" title="${item.name}">`
     ).join('');
 

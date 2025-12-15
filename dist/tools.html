@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ============================================
+         Division Zero - Tools Page
+         ============================================
+         Guide to AI tools and platforms.
+         ============================================ -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="The vibecoder's toolkit. Curated list of AI tools, frameworks, and platforms for building apps without coding.">
+
+    <title>Tools - divisionzero</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/assets/images/white-logo.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS Files -->
+        <!-- CSS Bundle -->
+    <link rel="stylesheet" href="styles.min.css">
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+    <div id="nav-placeholder" data-page="tools"></div>
+
+
+    <!-- ========================================
+         HERO SECTION
+         ======================================== -->
+    <section class="tools-hero">
+        <div class="container">
+            <div class="tools-header-content">
+                <h1 class="tools-main-title">
+                    The <span class="gradient-text">Vibecoder's</span> Toolkit
+                </h1>
+                <p class="tools-subtitle">
+                    Everything you need to build apps without writing code.
+                    From AI assistants to deployment platforms.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         TOOLS CONTAINER
+         Categories and cards rendered here by JS
+         ======================================== -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container" id="tools-container">
+            <!-- Tool categories inserted by tools.js -->
+        </div>
+    </section>
+
+
+    <!-- FOOTER -->
+    <div id="footer-placeholder"></div>
+
+
+    <!-- JavaScript Files -->    <!-- JS Bundle -->
+    <script src="app.min.js"></script>
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered'))
+                    .catch(err => console.log('SW error:', err));
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -103,10 +103,10 @@ function createToolCard(tool = {}) {
             
             <!-- HEADER: Logo + Name + Skill -->
             <div class="tool-header">
-                <img src="${toolIcon}" 
+            <img src="${toolIcon}" 
                      alt="${name}" 
                      class="tool-logo"
-                     onerror="this.src='https://via.placeholder.com/60x60/8b5cf6/ffffff?text=?'">
+                     onerror="this.onerror=null; this.src='/assets/images/white-logo.svg'">
                 <div>
                     <h3 class="tool-name">${name}</h3>
                     <span class="tool-skill">${free_tier ? '✓ Free tier' : 'Paid only'}</span>

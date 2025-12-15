@@ -58,9 +58,10 @@ const CONFIG = {
     // ========================================
     // DATA SETTINGS
     // ----------------------------------------
-    // For future Supabase integration
+    // Cloudflare Worker API for projects
     // ========================================
-    DATA_REFRESH_HOURS: 6,       // How often to refresh from database
+    WORKER_API_URL: 'https://divisionzero-sync.rndmprsn77.workers.dev',
+    DATA_REFRESH_HOURS: 1,       // Cron runs every 1 hour
     MAX_CAROUSEL_ITEMS: 20,      // Max items per carousel
     MAX_FEATURED_PROJECTS: 10,   // Max promoted/featured projects
 

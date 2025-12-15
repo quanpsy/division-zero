@@ -47,8 +47,18 @@ async function loadAndRenderProjects() {
     const container = document.getElementById('projects-container');
     if (!container) return;
 
-    // Load data from JSON
-    projectsData = await utils.loadJSON('data/projects.json');
+    // Load data from Cloudflare Worker API (with fallback to static JSON)
+    try {
+        const response = await fetch(`${CONFIG.WORKER_API_URL}/projects`);
+        if (response.ok) {
+            projectsData = await response.json();
+        } else {
+            throw new Error('Worker API failed');
+        }
+    } catch (error) {
+        console.log('Worker API unavailable, using static fallback...');
+        projectsData = await utils.loadJSON('data/projects.json');
+    }
 
     if (!projectsData) {
         container.innerHTML = `
@@ -60,25 +70,85 @@ async function loadAndRenderProjects() {
         return;
     }
 
-    // Define categories to show
-    const categories = [
-        { id: 'promoted', title: '✨ Promoted' },
-        { id: 'trending', title: '🔥 Top 10 Trending' },
-        { id: 'productivity', title: '💼 Productivity' },
-        { id: 'newReleases', title: '🆕 New Releases' },
-        { id: 'games', title: '🎮 Games' }
+    // Define carousels to show (order matters!)
+    const carousels = [
+        { id: 'promoted', title: '⭐ Promoted' },
+        { id: 'trending', title: '🔥 Trending' },
+        { id: 'editorsPick', title: '✨ Editor\'s Pick' },
+        { id: 'divisionZero', title: '🔷 Division Zero' },
+        { id: 'allTime', title: '👑 All-Time Best' },
+        // Categories (nested in projectsData.categories)
+        { id: 'categories.productivity', title: '💼 Productivity', key: 'productivity' },
+        { id: 'categories.developertools', title: '🛠️ Developer Tools', key: 'developertools' },
+        { id: 'categories.games', title: '🎮 Games', key: 'games' },
+        { id: 'categories.aiagents', title: '🤖 AI Agents', key: 'aiagents' },
+        { id: 'categories.design', title: '🎨 Design', key: 'design' },
+        // Saved at bottom - only shows if user has saved projects
+        { id: 'saved', title: '❤️ Your Saved Projects', special: 'saved' }
     ];
 
-    // Render each category
-    categories.forEach(category => {
-        const items = projectsData[category.id];
+    // Get all projects for saved lookup
+    const allProjects = [];
+    ['promoted', 'trending', 'editorsPick', 'divisionZero', 'allTime'].forEach(key => {
+        if (projectsData[key]) allProjects.push(...projectsData[key]);
+    });
+    if (projectsData.categories) {
+        Object.values(projectsData.categories).forEach(arr => allProjects.push(...arr));
+    }
+
+    // Render each carousel
+    carousels.forEach(carousel => {
+        let items;
+
+        // Handle saved carousel (from localStorage)
+        if (carousel.special === 'saved') {
+            const savedIds = getSavedProjectIds ? getSavedProjectIds() : [];
+            console.log('📌 Saved project IDs:', savedIds);
+
+            if (savedIds.length === 0) return; // Don't show empty saved carousel
+
+            // Remove duplicates from allProjects by slug
+            const uniqueProjects = [];
+            const seenSlugs = new Set();
+            allProjects.forEach(p => {
+                const key = p.slug || p.id;
+                if (!seenSlugs.has(key)) {
+                    seenSlugs.add(key);
+                    uniqueProjects.push(p);
+                }
+            });
+
+            // Find projects that match saved IDs
+            items = savedIds
+                .map(id => uniqueProjects.find(p => (p.slug || p.id) === id))
+                .filter(Boolean);
+
+            console.log('📌 Matched saved projects:', items.length);
+        }
+        // Handle nested categories
+        else if (carousel.id.startsWith('categories.') && projectsData.categories) {
+            items = projectsData.categories[carousel.key];
+        } else {
+            items = projectsData[carousel.id];
+        }
+
         if (items && items.length > 0) {
-            const section = createCategoryCarousel(category, items);
+            const section = createCategoryCarousel({ id: carousel.id, title: carousel.title }, items);
             if (section) {
                 container.appendChild(section);
             }
         }
     });
+
+    // Initialize long-press reporting on all cards
+    if (window.initProjectCardReporting) {
+        initProjectCardReporting();
+    }
+
+    // Initialize share and save button handlers
+    if (window.initProjectCardButtons) {
+        initProjectCardButtons();
+    }
 }
 
 
