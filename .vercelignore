@@ -1,34 +1,40 @@
 # ============================================
 # VERCEL IGNORE FILE
 # ============================================
-# Vercel will deploy dist/ folder (production build)
-# Everything else is ignored
+# Deploy from dist/ folder only
 
-# Source files (use dist/ instead)
-js/
-css/
-*.html
+# Source files (don't deploy these)
+/js/
+/css/
+/assets/
 
-# Bot (runs separately)
-bot/
+# Root HTML files (use dist/ versions instead)
+/index.html
+/projects.html
+/submit.html
+/tools.html
+/dictionary.html
+
+# Bot (runs separately on Railway)
+/bot/
 
 # Schemas and docs
-schemas/
+/schemas/
 
-# Worker (deployed separately)
-worker/
+# Worker (deployed to Cloudflare)
+/worker/
 
 # Build files
 esbuild.config.js
 package.json
 package-lock.json
-node_modules/
+/node_modules/
 
 # Local
 *.bat
 .env
 .env.local
-.git/
+/.git/
 .gitignore
 
 # Other
