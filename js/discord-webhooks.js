@@ -158,31 +158,54 @@ async function submitProjectToDiscord(projectData) {
 }
 
 /**
- * Submit a validation idea via Discord webhook
+ * Submit an idea via Discord webhook
+ * Routes to IDEA_VALIDATION or PAID_IDEA based on purpose
  * @param {Object} ideaData - Idea data from form
  */
 async function submitIdeaToDiscord(ideaData) {
     try {
-        const embed = {
-            title: '💡 New Idea Submission',
-            color: 0x3b82f6, // Blue for ideas
+        const isPaid = ideaData.purpose === 'client';
+
+        // Build embed based on type
+        const embed = isPaid ? {
+            // PAID IDEAS - Green color
+            title: '� New Paid Idea Request',
+            color: 0x10b981,
             fields: [
-                { name: '📝 Title', value: ideaData.ideaTitle || 'N/A', inline: true },
+                { name: '📝 Title', value: ideaData.title || 'N/A', inline: true },
                 { name: '📂 Category', value: ideaData.category || 'N/A', inline: true },
-                { name: '📄 Description', value: ideaData.ideaDescription || 'No description', inline: false },
-                { name: '👤 Submitted By', value: ideaData.discordId || 'Anonymous', inline: true }
+                { name: '� Budget', value: ideaData.budget || 'Not specified', inline: true },
+                { name: '🔗 Docs Link', value: ideaData.docsLink ? `[View Document](${ideaData.docsLink})` : 'N/A', inline: false },
+                { name: '👤 Name', value: ideaData.name || 'Anonymous', inline: true },
+                { name: '📧 Email', value: ideaData.email || 'N/A', inline: true }
+            ],
+            footer: { text: 'Paid Lead - DM owner with details' },
+            timestamp: new Date().toISOString()
+        } : {
+            // VALIDATION IDEAS - Blue color
+            title: '💡 New Idea Submission',
+            color: 0x3b82f6,
+            fields: [
+                { name: '📝 Title', value: ideaData.title || 'N/A', inline: true },
+                { name: '📂 Category', value: ideaData.category || 'N/A', inline: true },
+                { name: '🔗 Docs Link', value: ideaData.docsLink ? `[View Document](${ideaData.docsLink})` : 'N/A', inline: false },
+                { name: '👤 Name', value: ideaData.name || 'Anonymous', inline: true },
+                { name: '📧 Email', value: ideaData.email || 'N/A', inline: true }
             ],
             footer: { text: 'Validation Idea - Use bot commands to approve' },
             timestamp: new Date().toISOString()
         };
 
-        const response = await fetch(WEBHOOKS.IDEA_VALIDATION, {
+        // Choose webhook based on purpose
+        const webhookUrl = isPaid ? WEBHOOKS.PAID_IDEA : WEBHOOKS.IDEA_VALIDATION;
+
+        const response = await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 username: 'Division Zero',
-                embeds: [embed],
-                content: `\`\`\`json\n${JSON.stringify(ideaData, null, 2)}\n\`\`\``
+                embeds: [embed]
+                // No JSON content block - only embed
             })
         });
 

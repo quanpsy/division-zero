@@ -189,15 +189,14 @@ async function handleIdeaSubmit(e) {
     const isClient = data.purpose === 'client';
 
     const ideaData = {
-        // Section 1: Client/Submitter Info
-        clientName: data.clientName || '',
-        clientEmail: data.clientEmail || '',
+        // Section 1: Submitter Info (matches form field names)
+        name: data.name || '',
+        email: data.email || '',
         discordId: data.discordId || '',
 
         // Section 2: Idea Details
-        ideaTitle: data.ideaTitle || '',
-        ideaDescription: data.ideaDescription || '',
-        ideaDocLink: data.ideaDocLink || '',
+        title: data.title || '',
+        docsLink: data.docsLink || '',
         category: data.category || '',
 
         // Section 3: Purpose-specific
@@ -205,9 +204,7 @@ async function handleIdeaSubmit(e) {
 
         // Client-only fields (only if purpose = 'client')
         ...(isClient && {
-            budgetRange: data.budgetRange || '',
-            timeline: data.timeline || '',
-            additionalNotes: data.additionalNotes || ''
+            budget: data.budget || ''
         })
     };
 
