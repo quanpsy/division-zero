@@ -15,7 +15,7 @@
 // Discord Webhook URLs
 const WEBHOOKS = {
     PROJECT_APPROVAL: 'https://discord.com/api/webhooks/1449506383069315245/BhfXAwwxW2PjAo8AIbpaSFddZFHFKAV1WjU8yv44aSz2ZqtgP0r2XjcoelZ9FvmnuFBR',
-    IDEA_APPROVAL: 'https://discord.com/api/webhooks/1449506509364195338/P0GtjwJYX7tDinZHai6hwDFXzOAwvvJk1faJZS5DQ6MVvFr5-oe4sy8FRs3PbwjDD3eJ',
+    IDEA_VALIDATION: 'https://discord.com/api/webhooks/1449506809051086878/P0GtjwJYX7tDinZHai6hwDFXzOAwvvJk1faJZS5DQ6MVvFr5-oe4sy8FRs3PbwjDD3eJ',
     PAID_IDEA: 'https://discord.com/api/webhooks/1449507093039157481/eIef8VBiWEuFqex4W9LXKTtsaRA4R27pgjXk_G8OQkYDCrX0q0-fu-ltx9fBtv3aZFSX',
     REPORT: 'https://discord.com/api/webhooks/1450053123820486668/1g1uqEvKLkOlzN3rcdXcRvpTiazd5LSUXMmzXsfSPxDa8ttFF56Z5V2A9E2QndfDQocP'
 };
@@ -35,6 +35,34 @@ function generateSecretKey() {
 }
 
 /**
+ * Extract direct image URL from ImgBB HTML or BBCode
+ * @param {string} input - HTML like: <a href="..."><img src="https://i.ibb.co/xxx/img.png"...></a>
+ * @returns {string} Direct image URL (https://i.ibb.co/xxx/img.png)
+ */
+function extractImageUrl(input) {
+    if (!input) return '';
+
+    // Already a direct URL? Return as-is
+    if (input.startsWith('https://i.ibb.co/') ||
+        input.startsWith('https://i.imgur.com/') ||
+        input.match(/\.(png|jpg|jpeg|gif|webp)$/i)) {
+        return input.trim();
+    }
+
+    // Extract from HTML: <img src="URL"...>
+    const htmlMatch = input.match(/src=["']([^"']+)["']/i);
+    if (htmlMatch) return htmlMatch[1];
+
+    // Extract from BBCode: [img]URL[/img]
+    const bbMatch = input.match(/\[img\]([^\[]+)\[\/img\]/i);
+    if (bbMatch) return bbMatch[1];
+
+    // Fallback: return as-is (might be a plain URL)
+    return input.trim();
+}
+
+
+/**
  * Submit a project via Discord webhook
  * @param {Object} projectData - Project data from form
  * @returns {Object} Result with success, message, and secretKey
@@ -46,6 +74,9 @@ async function submitProjectToDiscord(projectData) {
 
         // Add secret key to project data
         projectData.secretKey = secretKey;
+
+        // Extract direct image URL from ImgBB HTML
+        projectData.logo = extractImageUrl(projectData.logo);
 
         // Encode project data as base64 to hide it but still make it parseable by bot
         const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(projectData))));
@@ -145,7 +176,7 @@ async function submitIdeaToDiscord(ideaData) {
             timestamp: new Date().toISOString()
         };
 
-        const response = await fetch(WEBHOOKS.IDEA_APPROVAL, {
+        const response = await fetch(WEBHOOKS.IDEA_VALIDATION, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

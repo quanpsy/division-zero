@@ -99,7 +99,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="project-name">Project Name *</label>
-                                <input type="text" id="project-name" name="name" required
+                                <input type="text" id="project-name" name="name" required maxlength="20"
                                     placeholder="e.g., TaskFlow Pro">
                             </div>
 
@@ -112,15 +112,12 @@
 
                         <div class="form-group">
                             <label for="project-description">Description *</label>
-                            <textarea id="project-description" name="description" required
+                            <textarea id="project-description" name="description" required maxlength="90"
                                 placeholder="What does your project do? What problem does it solve?"></textarea>
                         </div>
 
                         <div class="form-group">
-                            <label for="project-logo">Logo URL *</label>
-                            <input type="url" id="project-logo" name="logo" required
-                                placeholder="Imgur, ImgBB, GitHub only">
-                            <span class="form-hint">Square image recommended (200x200 or larger)</span>
+                            <label for="project-logo">Logo (ImgBB HTML) *</label><textarea id="project-logo" name="logo" required rows="2" placeholder="Paste full HTML from ImgBB: <a href=...><img src=...></a>"></textarea><span class="form-hint">Upload to imgbb.com ? Copy "HTML full linked" ? Paste here</span>
                         </div>
                     </div>
                     <!-- BUILDER INFO ROW -->
@@ -345,3 +342,4 @@
 </body>
 
 </html>
+

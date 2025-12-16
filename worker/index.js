@@ -334,10 +334,37 @@ async function buildProjectsJson(env) {
         totalProjects: allProjects.length
     };
 
+    // ============================================
+    // DEDUPLICATE: Remove projects that appear in higher priority carousels
+    // Priority: Promoted > Trending > Editor's Pick > Division Zero > All-Time > Categories
+    // ============================================
+    const usedIds = new Set();
+
+    // 1. Promoted gets first priority
+    json.promoted.forEach(p => usedIds.add(p.id));
+
+    // 2. Trending - remove items already in Promoted
+    json.trending = json.trending.filter(p => !usedIds.has(p.id));
+    json.trending.forEach(p => usedIds.add(p.id));
+
+    // 3. Editor's Pick - remove items already used
+    json.editorsPick = json.editorsPick.filter(p => !usedIds.has(p.id));
+    json.editorsPick.forEach(p => usedIds.add(p.id));
+
+    // 4. Division Zero - remove items already used
+    json.divisionZero = json.divisionZero.filter(p => !usedIds.has(p.id));
+    json.divisionZero.forEach(p => usedIds.add(p.id));
+
+    // 5. All-Time Best - remove items already used
+    json.allTime = json.allTime.filter(p => !usedIds.has(p.id));
+    json.allTime.forEach(p => usedIds.add(p.id));
+
     // Build category arrays with mix: 2 trending + 2 most viewed + 4 new
+    // Categories also exclude items from higher priority carousels
     for (const category of CONFIG.CATEGORIES) {
         const key = category.toLowerCase().replace(/\s+/g, '');
-        const categoryProjects = formatted.filter(p => p.category === category);
+        // Only include projects NOT already used in other carousels
+        const categoryProjects = formatted.filter(p => p.category === category && !usedIds.has(p.id));
 
         // 2 Trending (by trending score)
         const trending = [...categoryProjects]

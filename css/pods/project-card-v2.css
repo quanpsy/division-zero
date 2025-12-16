@@ -318,6 +318,14 @@
 /* ========================================
    SAVED STATE - Filled bookmark
    ======================================== */
+.project-card-v2 .card-icon.stat-save {
+    transition: all 0.15s ease;
+}
+
+.project-card-v2 .card-icon.stat-save:active {
+    transform: scale(0.85);
+}
+
 .project-card-v2 .card-icon.stat-save.saved {
     color: #f472b6;
     background: rgba(244, 114, 182, 0.15);

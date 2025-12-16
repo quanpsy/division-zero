@@ -431,20 +431,20 @@ function addToSavedCarousel(card, projectId) {
 
         savedSection = document.createElement('section');
         savedSection.id = 'carousel-saved';
-        savedSection.className = 'category-section';
+        savedSection.className = 'category-section project-category';
         savedSection.innerHTML = `
             <div class="category-header">
                 <h2 class="category-title">❤️ Your Bookmarks</h2>
             </div>
             <div class="carousel-wrapper">
-                <div class="carousel-track" id="saved-track"></div>
+                <div class="project-carousel" id="saved-track"></div>
             </div>
         `;
         container.appendChild(savedSection);
     }
 
     // Clone the card and add to saved track
-    const track = savedSection.querySelector('.carousel-track') || savedSection.querySelector('#saved-track');
+    const track = savedSection.querySelector('.project-carousel') || savedSection.querySelector('#saved-track');
     if (track) {
         const clone = card.cloneNode(true);
         clone.dataset.savedId = projectId;
