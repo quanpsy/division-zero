@@ -187,22 +187,22 @@ async function handleIdeaSubmit(e) {
 
     // Build schema-compliant object based on purpose
     const isClient = data.purpose === 'client';
-    
+
     const ideaData = {
         // Section 1: Client/Submitter Info
         clientName: data.clientName || '',
         clientEmail: data.clientEmail || '',
         discordId: data.discordId || '',
-        
+
         // Section 2: Idea Details
         ideaTitle: data.ideaTitle || '',
         ideaDescription: data.ideaDescription || '',
         ideaDocLink: data.ideaDocLink || '',
         category: data.category || '',
-        
+
         // Section 3: Purpose-specific
         purpose: data.purpose || 'validation',
-        
+
         // Client-only fields (only if purpose = 'client')
         ...(isClient && {
             budgetRange: data.budgetRange || '',
@@ -214,18 +214,24 @@ async function handleIdeaSubmit(e) {
     console.log('Idea submission:', ideaData);
     console.log('Is paid client:', isClient);
 
-    // Submit to webhook if configured
-    if (CONFIG.IDEA_WEBHOOK_URL) {
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            utils.showToast('Idea submitted successfully!');
-            resetIdeaForm(form);
-        } catch (error) {
-            utils.showToast('Submission failed. Please try again.');
+    // Submit to Discord webhook
+    try {
+        // Use the submitIdeaToDiscord function from discord-webhooks.js
+        if (typeof submitIdeaToDiscord === 'function') {
+            const result = await submitIdeaToDiscord(ideaData);
+            if (result.success) {
+                utils.showToast('Idea submitted successfully!');
+                resetIdeaForm(form);
+            } else {
+                utils.showToast('Submission failed. Please try again.');
+            }
+        } else {
+            console.error('submitIdeaToDiscord function not found');
+            utils.showToast('Submission error. Please try again.');
         }
-    } else {
-        utils.showToast('Idea received! (Demo mode)');
-        resetIdeaForm(form);
+    } catch (error) {
+        console.error('Idea submission error:', error);
+        utils.showToast('Submission failed. Please try again.');
     }
 
     // Re-enable button

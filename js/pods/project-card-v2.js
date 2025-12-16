@@ -372,47 +372,54 @@ function initProjectCardButtons() {
         });
     });
 
-    // Save buttons
+    // Save buttons - with debounce to prevent rapid-click issues
     document.querySelectorAll('.stat-save').forEach(btn => {
+        // Skip if already initialized
+        if (btn.dataset.initialized) return;
+        btn.dataset.initialized = 'true';
+
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
 
             const projectId = btn.dataset.projectId;
-            const projectName = btn.dataset.projectName;
             const card = btn.closest('.project-card-v2');
 
             if (!projectId) return;
 
-            // Get saved projects from localStorage
-            let savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+            // Prevent rapid clicks - simple debounce
+            if (btn.dataset.processing === 'true') return;
+            btn.dataset.processing = 'true';
+            setTimeout(() => btn.dataset.processing = 'false', 100);
 
-            const isSaved = savedProjects.includes(projectId);
+            // Toggle saved state based on current CLASS (not localStorage)
+            const isSaved = btn.classList.contains('saved');
 
             if (isSaved) {
                 // Remove from saved
-                savedProjects = savedProjects.filter(id => id !== projectId);
                 btn.classList.remove('saved');
                 btn.querySelector('svg').setAttribute('fill', 'none');
                 btn.title = 'Bookmark';
-                utils.showToast(`🔖 Removed: ${projectName}`);
-
-                // Remove from Saved carousel
                 removeFromSavedCarousel(projectId);
+
+                // Update localStorage
+                let savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+                savedProjects = savedProjects.filter(id => id !== projectId);
+                localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
             } else {
                 // Add to saved
-                savedProjects.push(projectId);
                 btn.classList.add('saved');
                 btn.querySelector('svg').setAttribute('fill', 'currentColor');
                 btn.title = 'Remove Bookmark';
-                utils.showToast(`❤️ Bookmarked: ${projectName}`);
-
-                // Add to Saved carousel (clone the card)
                 addToSavedCarousel(card, projectId);
-            }
 
-            // Update localStorage
-            localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
+                // Update localStorage
+                let savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
+                if (!savedProjects.includes(projectId)) {
+                    savedProjects.push(projectId);
+                }
+                localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
+            }
         });
     });
 }
