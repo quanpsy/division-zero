@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Dependencies (too large - download separately)
+node_modules/
+node-portable/
+
+# OS files
+.DS_Store
+Thumbs.db

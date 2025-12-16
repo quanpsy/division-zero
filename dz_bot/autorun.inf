@@ -1,0 +1,5 @@
+[autorun]
+open=START_BOT.bat
+icon=START_BOT.bat
+label=Division Zero Bot
+action=Start Division Zero Discord Bot
