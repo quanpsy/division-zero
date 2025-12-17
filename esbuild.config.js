@@ -1,10 +1,11 @@
 /* ============================================
-   esbuild.config.js - Build Configuration
+   esbuild.config.js - SPA Build Configuration
    ============================================
    
-   Creates production build in dist/:
+   Creates production SPA build in dist/:
    - Bundles JS and CSS
-   - Processes HTML with PWA tags
+   - MERGES all HTML pages into single index.html
+   - Adds SPA router
    - Copies assets
    - Adds service worker
    
@@ -16,8 +17,9 @@ const esbuild = require('esbuild');
 const fs = require('fs');
 const path = require('path');
 
-// JS files in correct load order
+// JS files in correct load order (router first!)
 const jsFiles = [
+    'js/router.js',           // SPA Router - MUST BE FIRST
     'js/utils.js',
     'js/config.js',
     'js/utils/mobile-spotlight.js',
@@ -68,8 +70,14 @@ const cssFiles = [
     'css/utils/mobile-spotlight.css'
 ];
 
-// HTML files to process
-const htmlFiles = ['index.html', 'projects.html', 'tools.html', 'dictionary.html', 'submit.html'];
+// HTML pages to merge into SPA
+const htmlPages = [
+    { file: 'index.html', id: 'home', isMain: true },
+    { file: 'projects.html', id: 'projects' },
+    { file: 'tools.html', id: 'tools' },
+    { file: 'dictionary.html', id: 'dictionary' },
+    { file: 'submit.html', id: 'submit' }
+];
 
 // Copy directory recursively
 function copyDir(src, dest) {
@@ -88,30 +96,101 @@ function copyDir(src, dest) {
     }
 }
 
-// Process HTML - replace CSS/JS with bundles
-function processHtml(html) {
-    // Find </head> and insert CSS bundle before it
-    // Remove all existing <link rel="stylesheet" href="css/..."> tags
-    html = html.replace(/<link rel="stylesheet" href="css\/[^"]+\.css">\s*/g, '');
+// Extract <body> content from HTML file
+function extractBodyContent(html) {
+    // Remove nav and footer placeholders (we'll have one global nav/footer)
+    html = html.replace(/<div id="nav-placeholder"[^>]*><\/div>/g, '');
+    html = html.replace(/<div id="footer-placeholder"><\/div>/g, '');
 
-    // Find </head> and add our bundle
-    html = html.replace(
-        '</head>',
-        `    <!-- CSS Bundle -->
-    <link rel="stylesheet" href="styles.min.css">
-</head>`
-    );
+    // Extract body content
+    const bodyMatch = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    if (!bodyMatch) return '';
 
-    // Remove all existing <script src="js/..."> tags
-    html = html.replace(/<script src="js\/[^"]+\.js"><\/script>\s*/g, '');
+    let body = bodyMatch[1];
 
-    // Also remove any stray Mobile Spotlight comments
-    html = html.replace(/\s*<!-- Mobile Spotlight -->\s*/g, '');
+    // Remove script tags (we'll add them globally)
+    body = body.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 
-    // Find </body> and add our bundle + SW before it
-    html = html.replace(
-        '</body>',
-        `    <!-- JS Bundle -->
+    return body.trim();
+}
+
+// Extract <head> content (only from main page)
+function extractHeadContent(html) {
+    const headMatch = html.match(/<head[^>]*>([\s\S]*?)<\/head>/i);
+    return headMatch ? headMatch[1] : '';
+}
+
+// Build SPA HTML by merging all pages
+function buildSpaHtml() {
+    const mainPage = htmlPages.find(p => p.isMain);
+    const mainHtml = fs.readFileSync(mainPage.file, 'utf8');
+
+    // Get head from main page
+    let head = extractHeadContent(mainHtml);
+
+    // Remove old CSS/JS references
+    head = head.replace(/<link rel="stylesheet" href="css\/[^"]+\.css">\s*/g, '');
+    head = head.replace(/<script src="js\/[^"]+\.js"><\/script>\s*/g, '');
+
+    // Add CSS bundle at the end of head content
+    head += `
+    <!-- CSS Bundle -->
+    <link rel="stylesheet" href="styles.min.css">`;
+
+    // Add PWA tags if not present
+    if (!head.includes('rel="manifest"')) {
+        head = head.replace('</title>', `</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="apple-touch-icon" href="/assets/images/white-logo.svg">`);
+    }
+
+    // Build page sections
+    let pagesHtml = '';
+    for (const page of htmlPages) {
+        if (!fs.existsSync(page.file)) continue;
+
+        const html = fs.readFileSync(page.file, 'utf8');
+        const content = extractBodyContent(html);
+        const isActive = page.isMain ? 'active' : '';
+        const display = page.isMain ? 'block' : 'none';
+
+        pagesHtml += `
+    <!-- PAGE: ${page.id.toUpperCase()} -->
+    <div id="page-${page.id}" class="spa-page ${isActive}" style="display: ${display};">
+        ${content}
+    </div>
+`;
+    }
+
+    // Build final SPA HTML
+    const spaHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+${head}
+
+    <!-- SPA Page Styles -->
+    <style>
+        .spa-page { display: none; }
+        .spa-page.active { display: block; }
+    </style>
+</head>
+<body>
+    <!-- NAVIGATION (global) -->
+    <div id="nav-placeholder" data-page="home"></div>
+
+    <!-- SPA PAGES CONTAINER -->
+    <main id="spa-app">
+${pagesHtml}
+    </main>
+
+    <!-- FOOTER (global) -->
+    <div id="footer-placeholder"></div>
+
+    <!-- JS Bundle -->
     <script src="app.min.js"></script>
 
     <!-- Service Worker -->
@@ -124,28 +203,14 @@ function processHtml(html) {
             });
         }
     </script>
-</body>`
-    );
+</body>
+</html>`;
 
-    // Add PWA tags after </title>
-    if (!html.includes('rel="manifest"')) {
-        html = html.replace(
-            '</title>',
-            `</title>
-
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#8b5cf6">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="apple-touch-icon" href="/assets/images/white-logo.svg">`
-        );
-    }
-
-    return html;
+    return spaHtml;
 }
 
 async function build() {
-    console.log('🔨 Building production...\n');
+    console.log('🔨 Building SPA production...\n');
 
     // Clean and create dist folder
     if (fs.existsSync('dist')) {
@@ -154,7 +219,7 @@ async function build() {
     fs.mkdirSync('dist');
 
     // === BUNDLE JS ===
-    console.log('📦 Bundling JavaScript...');
+    console.log('📦 Bundling JavaScript (with router)...');
     let jsContent = '';
     let jsCount = 0;
     for (const file of jsFiles) {
@@ -190,15 +255,10 @@ async function build() {
     });
     fs.unlinkSync('dist/_temp.css');
 
-    // === PROCESS HTML FILES ===
-    console.log('📄 Processing HTML files...');
-    for (const htmlFile of htmlFiles) {
-        if (fs.existsSync(htmlFile)) {
-            let html = fs.readFileSync(htmlFile, 'utf8');
-            html = processHtml(html);
-            fs.writeFileSync(`dist/${htmlFile}`, html);
-        }
-    }
+    // === BUILD SPA HTML ===
+    console.log('🏠 Building SPA (merging all pages)...');
+    const spaHtml = buildSpaHtml();
+    fs.writeFileSync('dist/index.html', spaHtml);
 
     // === COPY PWA FILES ===
     console.log('📱 Adding PWA files...');
@@ -213,14 +273,16 @@ async function build() {
     // === SUMMARY ===
     const jsSize = fs.statSync('dist/app.min.js').size;
     const cssSize = fs.statSync('dist/styles.min.css').size;
+    const htmlSize = fs.statSync('dist/index.html').size;
 
-    console.log(`\n✅ Production build complete!\n`);
+    console.log(`\n✅ SPA build complete!\n`);
     console.log(`   Location: dist/`);
-    console.log(`   JS:  ${jsCount} files → ${(jsSize / 1024).toFixed(2)} KB`);
-    console.log(`   CSS: ${cssCount} files → ${(cssSize / 1024).toFixed(2)} KB`);
-    console.log(`   Total: ${((jsSize + cssSize) / 1024).toFixed(2)} KB`);
+    console.log(`   HTML: 5 pages → 1 SPA (${(htmlSize / 1024).toFixed(2)} KB)`);
+    console.log(`   JS:   ${jsCount} files → ${(jsSize / 1024).toFixed(2)} KB`);
+    console.log(`   CSS:  ${cssCount} files → ${(cssSize / 1024).toFixed(2)} KB`);
+    console.log(`   Total: ${((jsSize + cssSize + htmlSize) / 1024).toFixed(2)} KB`);
     console.log(`   PWA: ✓ manifest.json, sw.js`);
-    console.log(`\n   Deploy dist/ folder to Vercel! 🚀\n`);
+    console.log(`\n   🚀 Only 6 edge requests for entire site!\n`);
 }
 
 build().catch(err => {

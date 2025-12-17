@@ -37,7 +37,7 @@ function renderNavigation(activePage = 'home') {
             <div class="container nav-container">
                 
                 <!-- LOGO -->
-                <a href="index.html" class="logo-link">
+                <a href="/" class="logo-link">
                     <img src="assets/images/white-name.svg" 
                          alt="${CONFIG.SITE_NAME}" 
                          class="logo-nav">

@@ -96,11 +96,11 @@ const CONFIG = {
     // Links shown in the nav bar
     // ========================================
     NAV_LINKS: [
-        { name: 'Home', href: 'index.html', id: 'home' },
-        { name: 'Projects', href: 'projects.html', id: 'projects' },
-        { name: 'Tools', href: 'tools.html', id: 'tools' },
-        { name: 'Dictionary', href: 'dictionary.html', id: 'dictionary' },
-        { name: 'Submit', href: 'submit.html', id: 'submit' }
+        { name: 'Home', href: '/', id: 'home' },
+        { name: 'Projects', href: '/projects', id: 'projects' },
+        { name: 'Tools', href: '/tools', id: 'tools' },
+        { name: 'Dictionary', href: '/dictionary', id: 'dictionary' },
+        { name: 'Submit', href: '/submit', id: 'submit' }
     ]
 };
 
