@@ -1,28 +1,18 @@
 /* ============================================
-   Service Worker - Division Zero SPA v2.0
+   Service Worker - Division Zero SPA v2.1
    ============================================
    
-   OPTIMIZED FOR SPA:
-   - Only 6 files to cache (index.html contains all pages)
+   CACHE-ON-DEMAND STRATEGY:
+   - NO precaching (avoids duplicate requests!)
+   - Files cached as they're loaded
    - Projects API cached for 15 minutes
-   - Cache first for all static assets
    
-   Target: 6 edge requests total!
+   Target: ~9 edge requests per first visit!
    
    ============================================ */
 
-const CACHE_VERSION = '2.0';
+const CACHE_VERSION = '2.1';
 const CACHE_NAME = `divisionzero-${CACHE_VERSION}`;
-
-// Minimal cache list for SPA
-const CACHE_FILES = [
-    '/',
-    '/app.min.js',
-    '/styles.min.css',
-    '/manifest.json',
-    '/assets/images/white-logo.svg',
-    '/assets/images/white-name.svg'
-];
 
 // Projects API cache (15 min)
 const API_CACHE = 'divisionzero-api';
@@ -30,20 +20,10 @@ const API_CACHE_DURATION = 15 * 60 * 1000;
 
 
 // === INSTALL ===
+// No precaching! Just activate immediately.
 self.addEventListener('install', (event) => {
-    console.log('[SW] Installing v' + CACHE_VERSION);
-
-    event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                console.log('[SW] Caching SPA files...');
-                return cache.addAll(CACHE_FILES);
-            })
-            .then(() => {
-                console.log('[SW] Install complete');
-                return self.skipWaiting();
-            })
-    );
+    console.log('[SW] Installing v' + CACHE_VERSION + ' (no precache)');
+    self.skipWaiting();
 });
 
 
@@ -92,25 +72,38 @@ self.addEventListener('fetch', (event) => {
     }
 
     // === SPA NAVIGATION ===
-    // All routes serve the same index.html
+    // All routes serve the same index.html from cache if available
     if (event.request.mode === 'navigate') {
         event.respondWith(
             caches.match('/').then(cached => {
-                return cached || fetch(event.request);
+                if (cached) {
+                    console.log('[SW] SPA HTML from cache');
+                    return cached;
+                }
+                return fetch(event.request).then(response => {
+                    // Cache the SPA HTML for future navigations
+                    const clone = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put('/', clone));
+                    return response;
+                });
             })
         );
         return;
     }
 
     // === STATIC ASSETS ===
-    // Cache first for everything else
+    // Cache-first: serve from cache, fetch and cache if not found
     event.respondWith(
         caches.match(event.request)
             .then((cached) => {
-                if (cached) return cached;
+                if (cached) {
+                    console.log('[SW] Cache hit:', url.pathname);
+                    return cached;
+                }
 
+                // Not in cache - fetch and cache for next time
                 return fetch(event.request).then((response) => {
-                    if (response.ok) {
+                    if (response.ok && response.status === 200) {
                         const clone = response.clone();
                         caches.open(CACHE_NAME).then((cache) => {
                             cache.put(event.request, clone);
