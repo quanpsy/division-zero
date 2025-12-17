@@ -1,9 +1,14 @@
 /* ============================================
-   router.js - Simple SPA Router
+   router.js - SPA Router for Division Zero
    ============================================
    
    Handles client-side navigation without page reloads.
    Pages are sections in the DOM, shown/hidden based on route.
+   
+   Now also handles:
+   - Nav rendering (once)
+   - Footer rendering (once)
+   - Correct nav active state on any route
    
    ============================================ */
 
@@ -18,8 +23,12 @@ const Router = {
     },
 
     currentPage: null,
+    navRendered: false,
 
     init() {
+        // Render nav and footer FIRST (only once)
+        this.renderGlobalComponents();
+
         // Handle initial route
         this.handleRoute();
 
@@ -46,6 +55,25 @@ const Router = {
         });
 
         console.log('[Router] Initialized');
+    },
+
+    renderGlobalComponents() {
+        // Get current page from URL for correct nav state
+        let path = window.location.pathname.replace(/^\//, '').replace('.html', '');
+        let currentPage = this.routes[path] || 'home';
+
+        // Render nav with correct active page
+        const navPlaceholder = document.getElementById('nav-placeholder');
+        if (navPlaceholder && typeof renderNavigation === 'function') {
+            renderNavigation(currentPage);
+            this.navRendered = true;
+            console.log('[Router] Nav rendered for:', currentPage);
+        }
+
+        // Render footer
+        if (typeof renderFooter === 'function') {
+            renderFooter();
+        }
     },
 
     navigate(page) {
@@ -118,9 +146,26 @@ const Router = {
     },
 
     initPage(page) {
-        // Trigger page-specific initialization
-        const event = new CustomEvent('spa:pageload', { detail: { page } });
-        window.dispatchEvent(event);
+        // Call page-specific initialization function
+        // Only run for the CURRENT page to avoid duplicate data fetches
+        switch (page) {
+            case 'home':
+                if (typeof initHomePage === 'function') initHomePage();
+                break;
+            case 'projects':
+                if (typeof initProjectsPage === 'function') initProjectsPage();
+                break;
+            case 'tools':
+                if (typeof initToolsPage === 'function') initToolsPage();
+                break;
+            case 'dictionary':
+                if (typeof initDictionaryPage === 'function') initDictionaryPage();
+                break;
+            case 'submit':
+                if (typeof initSubmitPage === 'function') initSubmitPage();
+                break;
+        }
+        console.log('[Router] Page init:', page);
     }
 };
 

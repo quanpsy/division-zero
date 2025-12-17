@@ -17,14 +17,7 @@
  * Initialize the home page
  */
 function initHomePage() {
-
-    // Render nav and footer
-    const navPlaceholder = document.getElementById('nav-placeholder');
-    if (navPlaceholder) {
-        const activePage = navPlaceholder.dataset.page || 'home';
-        renderNavigation(activePage);
-    }
-    renderFooter();
+    // NOTE: Nav and footer are now rendered by Router
 
     // Initialize effects
     initScrollAnimations();
@@ -145,5 +138,6 @@ function initMouseGlow() {
 }
 
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initHomePage);
+// NOTE: initHomePage is called by Router when navigating to home page
+// DO NOT add DOMContentLoaded listener here - Router handles page initialization
+window.initHomePage = initHomePage;

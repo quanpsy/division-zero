@@ -23,14 +23,7 @@ let allTerms = [];
  * Initialize the dictionary page
  */
 async function initDictionaryPage() {
-
-    // Render nav and footer
-    const navPlaceholder = document.getElementById('nav-placeholder');
-    if (navPlaceholder) {
-        const activePage = navPlaceholder.dataset.page || 'dictionary';
-        renderNavigation(activePage);
-    }
-    renderFooter();
+    // NOTE: Nav and footer are now rendered by Router
 
     // Load and render terms
     await loadAndRenderTerms();
@@ -194,5 +187,6 @@ function closeTermModal() {
 window.closeTermModal = closeTermModal;
 
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initDictionaryPage);
+// NOTE: initDictionaryPage is called by Router when navigating to dictionary page
+// DO NOT add DOMContentLoaded listener here - Router handles page initialization
+window.initDictionaryPage = initDictionaryPage;

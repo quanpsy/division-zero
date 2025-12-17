@@ -141,6 +141,9 @@ function buildSpaHtml() {
     if (!head.includes('rel="manifest"')) {
         head = head.replace('</title>', `</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#8b5cf6">
@@ -264,6 +267,9 @@ async function build() {
     console.log('📱 Adding PWA files...');
     fs.copyFileSync('manifest.json', 'dist/manifest.json');
     fs.copyFileSync('sw.js', 'dist/sw.js');
+    if (fs.existsSync('favicon.svg')) {
+        fs.copyFileSync('favicon.svg', 'dist/favicon.svg');
+    }
 
     // === COPY ASSETS ===
     console.log('📁 Copying assets...');

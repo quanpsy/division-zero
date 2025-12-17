@@ -16,14 +16,7 @@
  * Initialize the tools page
  */
 async function initToolsPage() {
-
-    // Render nav and footer
-    const navPlaceholder = document.getElementById('nav-placeholder');
-    if (navPlaceholder) {
-        const activePage = navPlaceholder.dataset.page || 'tools';
-        renderNavigation(activePage);
-    }
-    renderFooter();
+    // NOTE: Nav and footer are now rendered by Router
 
     // Load and render tools
     await loadAndRenderTools();
@@ -82,5 +75,6 @@ async function loadAndRenderTools() {
 }
 
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initToolsPage);
+// NOTE: initToolsPage is called by Router when navigating to tools page
+// DO NOT add DOMContentLoaded listener here - Router handles page initialization
+window.initToolsPage = initToolsPage;

@@ -16,14 +16,7 @@
  * Initialize the submit page
  */
 function initSubmitPage() {
-
-    // Render nav and footer
-    const navPlaceholder = document.getElementById('nav-placeholder');
-    if (navPlaceholder) {
-        const activePage = navPlaceholder.dataset.page || 'submit';
-        renderNavigation(activePage);
-    }
-    renderFooter();
+    // NOTE: Nav and footer are now rendered by Router
 
     // Initialize form toggle
     initFormToggle();
@@ -64,5 +57,6 @@ function initFormToggle() {
 }
 
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initSubmitPage);
+// NOTE: initSubmitPage is called by Router when navigating to submit page
+// DO NOT add DOMContentLoaded listener here - Router handles page initialization
+window.initSubmitPage = initSubmitPage;

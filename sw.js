@@ -1,28 +1,24 @@
 /* ============================================
-   Service Worker - Division Zero SPA v2.1
+   Service Worker - Division Zero SPA v2.3
    ============================================
    
-   CACHE-ON-DEMAND STRATEGY:
-   - NO precaching (avoids duplicate requests!)
-   - Files cached as they're loaded
-   - Projects API cached for 15 minutes
-   
-   Target: ~9 edge requests per first visit!
+   OPTIMIZED SPA CACHING:
+   - NO precaching
+   - SPA navigation: cache AND serve under '/'
+   - Files cached as loaded
+   - API cached for 15 minutes
    
    ============================================ */
 
-const CACHE_VERSION = '2.1';
+const CACHE_VERSION = '2.3';
 const CACHE_NAME = `divisionzero-${CACHE_VERSION}`;
-
-// Projects API cache (15 min)
 const API_CACHE = 'divisionzero-api';
 const API_CACHE_DURATION = 15 * 60 * 1000;
 
 
 // === INSTALL ===
-// No precaching! Just activate immediately.
 self.addEventListener('install', (event) => {
-    console.log('[SW] Installing v' + CACHE_VERSION + ' (no precache)');
+    console.log('[SW] Installing v' + CACHE_VERSION);
     self.skipWaiting();
 });
 
@@ -30,25 +26,19 @@ self.addEventListener('install', (event) => {
 // === ACTIVATE ===
 self.addEventListener('activate', (event) => {
     console.log('[SW] Activating v' + CACHE_VERSION);
-
     event.waitUntil(
-        caches.keys()
-            .then((cacheNames) => {
-                return Promise.all(
-                    cacheNames.map((cacheName) => {
-                        if (cacheName.startsWith('divisionzero-') &&
-                            cacheName !== CACHE_NAME &&
-                            cacheName !== API_CACHE) {
-                            console.log('[SW] Deleting old cache:', cacheName);
-                            return caches.delete(cacheName);
-                        }
-                    })
-                );
-            })
-            .then(() => {
-                console.log('[SW] Activated');
-                return self.clients.claim();
-            })
+        caches.keys().then((names) => {
+            return Promise.all(
+                names.map((name) => {
+                    if (name.startsWith('divisionzero-') &&
+                        name !== CACHE_NAME &&
+                        name !== API_CACHE) {
+                        console.log('[SW] Clearing old cache:', name);
+                        return caches.delete(name);
+                    }
+                })
+            );
+        }).then(() => self.clients.claim())
     );
 });
 
@@ -57,78 +47,94 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // Skip non-GET requests
+    // Skip non-GET
     if (event.request.method !== 'GET') return;
 
-    // === CLOUDFLARE WORKER API ===
+    // === CLOUDFLARE API ===
     if (url.hostname.includes('workers.dev')) {
         event.respondWith(handleApiRequest(event.request));
         return;
     }
 
-    // === EXTERNAL REQUESTS (fonts, CDN) ===
+    // === EXTERNAL ===
     if (!url.origin.includes(self.location.origin)) {
-        return; // Let browser handle
+        return;
     }
 
     // === SPA NAVIGATION ===
-    // All routes serve the same index.html from cache if available
     if (event.request.mode === 'navigate') {
-        event.respondWith(
-            caches.match('/').then(cached => {
-                if (cached) {
-                    console.log('[SW] SPA HTML from cache');
-                    return cached;
-                }
-                return fetch(event.request).then(response => {
-                    // Cache the SPA HTML for future navigations
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put('/', clone));
-                    return response;
-                });
-            })
-        );
+        event.respondWith(handleNavigation(event.request));
         return;
     }
 
     // === STATIC ASSETS ===
-    // Cache-first: serve from cache, fetch and cache if not found
-    event.respondWith(
-        caches.match(event.request)
-            .then((cached) => {
-                if (cached) {
-                    console.log('[SW] Cache hit:', url.pathname);
-                    return cached;
-                }
-
-                // Not in cache - fetch and cache for next time
-                return fetch(event.request).then((response) => {
-                    if (response.ok && response.status === 200) {
-                        const clone = response.clone();
-                        caches.open(CACHE_NAME).then((cache) => {
-                            cache.put(event.request, clone);
-                        });
-                    }
-                    return response;
-                });
-            })
-    );
+    event.respondWith(handleStatic(event.request));
 });
 
 
-// === API HANDLER (with 15 min cache) ===
+// Handle SPA navigation - always serve index.html from cache or network
+async function handleNavigation(request) {
+    const cache = await caches.open(CACHE_NAME);
+
+    // Try to get cached SPA shell (stored under '/')
+    let cached = await cache.match('/');
+
+    if (cached) {
+        console.log('[SW] SPA from cache');
+        return cached;
+    }
+
+    // Not cached - fetch the actual root
+    try {
+        const response = await fetch('/');
+        if (response.ok) {
+            // Cache under '/' for future navigations
+            cache.put('/', response.clone());
+            console.log('[SW] SPA cached');
+        }
+        return response;
+    } catch (err) {
+        console.error('[SW] Navigation fetch failed:', err);
+        // Return whatever we can
+        return new Response('<h1>Offline</h1>', {
+            status: 503,
+            headers: { 'Content-Type': 'text/html' }
+        });
+    }
+}
+
+
+// Handle static assets with cache-first strategy
+async function handleStatic(request) {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(request);
+
+    if (cached) {
+        return cached;
+    }
+
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            cache.put(request, response.clone());
+        }
+        return response;
+    } catch (err) {
+        return new Response('Not found', { status: 404 });
+    }
+}
+
+
+// Handle API requests with 15-min cache
 async function handleApiRequest(request) {
     const cache = await caches.open(API_CACHE);
     const cached = await cache.match(request);
 
     if (cached) {
         const cachedAt = cached.headers.get('sw-cached-at');
-        if (cachedAt) {
-            const age = Date.now() - parseInt(cachedAt);
-            if (age < API_CACHE_DURATION) {
-                console.log('[SW] API from cache');
-                return cached;
-            }
+        if (cachedAt && (Date.now() - parseInt(cachedAt)) < API_CACHE_DURATION) {
+            console.log('[SW] API from cache');
+            return cached;
         }
     }
 
@@ -137,12 +143,12 @@ async function handleApiRequest(request) {
         if (response.ok) {
             const headers = new Headers(response.headers);
             headers.set('sw-cached-at', Date.now().toString());
-            const cachedResponse = new Response(response.clone().body, {
+            const toCache = new Response(response.clone().body, {
                 status: response.status,
                 statusText: response.statusText,
-                headers: headers
+                headers
             });
-            cache.put(request, cachedResponse);
+            cache.put(request, toCache);
         }
         return response;
     } catch (err) {
@@ -151,9 +157,7 @@ async function handleApiRequest(request) {
 }
 
 
-// === MESSAGE HANDLER ===
+// === MESSAGE ===
 self.addEventListener('message', (event) => {
-    if (event.data === 'skipWaiting') {
-        self.skipWaiting();
-    }
+    if (event.data === 'skipWaiting') self.skipWaiting();
 });

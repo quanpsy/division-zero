@@ -21,14 +21,7 @@ let projectsData = null;
  * Initialize the projects page
  */
 async function initProjectsPage() {
-
-    // Render nav and footer
-    const navPlaceholder = document.getElementById('nav-placeholder');
-    if (navPlaceholder) {
-        const activePage = navPlaceholder.dataset.page || 'projects';
-        renderNavigation(activePage);
-    }
-    renderFooter();
+    // NOTE: Nav and footer are now rendered by Router
 
     // Load and render projects
     await loadAndRenderProjects();
@@ -278,5 +271,6 @@ function toggleNoResults(show) {
 }
 
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initProjectsPage);
+// NOTE: initProjectsPage is called by Router when navigating to projects page
+// DO NOT add DOMContentLoaded listener here - Router handles page initialization
+window.initProjectsPage = initProjectsPage;

@@ -205,19 +205,35 @@ function throttle(fn, limit = 100) {
 }
 
 
+// JSON cache to prevent duplicate fetches
+const jsonCache = {};
+
 /**
- * Load JSON data from a file
+ * Load JSON data from a file (with caching)
+ * Same URL will only be fetched ONCE per page load
  * 
  * @param {string} url - Path to JSON file
  * @returns {Promise<object>}
  */
 async function loadJSON(url) {
+    // Return cached data if available
+    if (jsonCache[url]) {
+        console.log('[utils] JSON cache hit:', url);
+        return jsonCache[url];
+    }
+
     try {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`Failed to load ${url}: ${response.status}`);
         }
-        return await response.json();
+        const data = await response.json();
+
+        // Cache the result
+        jsonCache[url] = data;
+        console.log('[utils] JSON cached:', url);
+
+        return data;
     } catch (error) {
         console.error(`Error loading JSON from ${url}:`, error);
         return null;
