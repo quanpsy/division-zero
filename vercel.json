@@ -1,5 +1,11 @@
 {
   "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/((?!assets|data|.*\\..*).*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/assets/(.*)",
