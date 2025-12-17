@@ -15,12 +15,20 @@
 
 // Store loaded projects data
 let projectsData = null;
+let projectsPageInitialized = false;
 
 
 /**
  * Initialize the projects page
  */
 async function initProjectsPage() {
+    // Prevent re-initialization (prevents duplicate sections)
+    if (projectsPageInitialized) {
+        console.log('[Projects] Already initialized, skipping');
+        return;
+    }
+    projectsPageInitialized = true;
+
     // NOTE: Nav and footer are now rendered by Router
 
     // Load and render projects

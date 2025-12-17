@@ -206,38 +206,41 @@ function throttle(fn, limit = 100) {
 
 
 // JSON cache to prevent duplicate fetches
+// We cache the PROMISE, not the result - this prevents race conditions
 const jsonCache = {};
 
 /**
- * Load JSON data from a file (with caching)
- * Same URL will only be fetched ONCE per page load
+ * Load JSON data from a file (with deduplication)
+ * Concurrent calls for the same URL share a single fetch request
  * 
  * @param {string} url - Path to JSON file
  * @returns {Promise<object>}
  */
 async function loadJSON(url) {
-    // Return cached data if available
+    // If there's already a pending or completed request, return it
     if (jsonCache[url]) {
         console.log('[utils] JSON cache hit:', url);
         return jsonCache[url];
     }
 
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Failed to load ${url}: ${response.status}`);
-        }
-        const data = await response.json();
+    // Cache the PROMISE immediately (before awaiting)
+    // This way, any concurrent calls will get the same promise
+    console.log('[utils] JSON fetching:', url);
+    jsonCache[url] = fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load ${url}: ${response.status}`);
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error(`Error loading JSON from ${url}:`, error);
+            // Remove from cache on error so retry is possible
+            delete jsonCache[url];
+            return null;
+        });
 
-        // Cache the result
-        jsonCache[url] = data;
-        console.log('[utils] JSON cached:', url);
-
-        return data;
-    } catch (error) {
-        console.error(`Error loading JSON from ${url}:`, error);
-        return null;
-    }
+    return jsonCache[url];
 }
 
 

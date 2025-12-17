@@ -12,10 +12,20 @@
    ============================================ */
 
 
+// Track if page was already initialized
+let toolsPageInitialized = false;
+
 /**
  * Initialize the tools page
  */
 async function initToolsPage() {
+    // Prevent re-initialization (saves edge requests)
+    if (toolsPageInitialized) {
+        console.log('[Tools] Already initialized, skipping');
+        return;
+    }
+    toolsPageInitialized = true;
+
     // NOTE: Nav and footer are now rendered by Router
 
     // Load and render tools

@@ -12,10 +12,19 @@
    ============================================ */
 
 
+let submitPageInitialized = false;
+
 /**
  * Initialize the submit page
  */
 function initSubmitPage() {
+    // Prevent re-initialization
+    if (submitPageInitialized) {
+        console.log('[Submit] Already initialized, skipping');
+        return;
+    }
+    submitPageInitialized = true;
+
     // NOTE: Nav and footer are now rendered by Router
 
     // Initialize form toggle

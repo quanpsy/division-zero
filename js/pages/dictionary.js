@@ -17,12 +17,20 @@
 // Store loaded terms data
 let dictionaryData = null;
 let allTerms = [];
+let dictionaryPageInitialized = false;
 
 
 /**
  * Initialize the dictionary page
  */
 async function initDictionaryPage() {
+    // Prevent re-initialization
+    if (dictionaryPageInitialized) {
+        console.log('[Dictionary] Already initialized, skipping');
+        return;
+    }
+    dictionaryPageInitialized = true;
+
     // NOTE: Nav and footer are now rendered by Router
 
     // Load and render terms

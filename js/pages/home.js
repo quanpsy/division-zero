@@ -13,10 +13,19 @@
    ============================================ */
 
 
+let homePageInitialized = false;
+
 /**
  * Initialize the home page
  */
 function initHomePage() {
+    // Prevent re-initialization
+    if (homePageInitialized) {
+        console.log('[Home] Already initialized, skipping');
+        return;
+    }
+    homePageInitialized = true;
+
     // NOTE: Nav and footer are now rendered by Router
 
     // Initialize effects
