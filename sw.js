@@ -1,19 +1,26 @@
 /* ============================================
-   Service Worker - Division Zero
+   Service Worker - Division Zero v1.2
    ============================================
    
-   Cache Strategy:
-   - CSS/JS: Cache first (versioned via cache name)
-   - HTML: Network first, cache fallback
-   - Images: Cache first
-   - Data: Network first, cache fallback
+   AGGRESSIVE CACHING STRATEGY:
+   - First visit: ~5 edge requests (SW install + precache)
+   - Return visit: ~1-2 edge requests (only projects API)
+   - All static files cached for 1 year
+   - Projects API cached for 15 minutes
+   
+   Target: 100K users on Vercel free tier
    
    ============================================ */
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = '1.2';
 const CACHE_NAME = `divisionzero-${CACHE_VERSION}`;
 
-// Files to cache on install
+// Projects API cache (15 min)
+const PROJECTS_CACHE = 'divisionzero-projects';
+const PROJECTS_CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
+
+// ALL static files to precache on first install
+// After this, NO more edge requests needed for these files!
 const CACHE_FILES = [
     '/',
     '/index.html',
@@ -26,7 +33,6 @@ const CACHE_FILES = [
     '/manifest.json',
     '/assets/images/white-logo.svg',
     '/assets/images/white-name.svg',
-    '/data/projects.json',
     '/data/tools.json',
     '/data/dictionary.json',
     '/data/icons.json'
@@ -35,16 +41,16 @@ const CACHE_FILES = [
 
 // === INSTALL ===
 self.addEventListener('install', (event) => {
-    console.log('[SW] Installing...');
+    console.log('[SW] Installing v' + CACHE_VERSION);
 
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
-                console.log('[SW] Caching files...');
+                console.log('[SW] Precaching all static files...');
                 return cache.addAll(CACHE_FILES);
             })
             .then(() => {
-                console.log('[SW] Install complete');
+                console.log('[SW] Install complete - all files cached!');
                 return self.skipWaiting();
             })
     );
@@ -53,14 +59,17 @@ self.addEventListener('install', (event) => {
 
 // === ACTIVATE ===
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Activating...');
+    console.log('[SW] Activating v' + CACHE_VERSION);
 
     event.waitUntil(
         caches.keys()
             .then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        if (cacheName !== CACHE_NAME) {
+                        // Delete old version caches (but keep projects cache)
+                        if (cacheName.startsWith('divisionzero-') &&
+                            cacheName !== CACHE_NAME &&
+                            cacheName !== PROJECTS_CACHE) {
                             console.log('[SW] Deleting old cache:', cacheName);
                             return caches.delete(cacheName);
                         }
@@ -68,7 +77,7 @@ self.addEventListener('activate', (event) => {
                 );
             })
             .then(() => {
-                console.log('[SW] Activated');
+                console.log('[SW] Activated - old caches cleared');
                 return self.clients.claim();
             })
     );
@@ -82,72 +91,87 @@ self.addEventListener('fetch', (event) => {
     // Skip non-GET requests
     if (event.request.method !== 'GET') return;
 
-    // Skip external requests
-    if (!url.origin.includes(self.location.origin)) return;
-
-    // Skip Discord/Supabase API calls
-    if (url.hostname.includes('discord') || url.hostname.includes('supabase')) {
-        return;
-    }
-
-    // HTML files: Network first, cache fallback
-    if (event.request.mode === 'navigate' || url.pathname.endsWith('.html')) {
+    // === CLOUDFLARE WORKER API (Projects) ===
+    // Cache for 15 minutes to reduce edge requests
+    if (url.hostname.includes('workers.dev') && url.pathname === '/projects') {
         event.respondWith(
-            fetch(event.request)
-                .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clone);
-                    });
+            caches.open(PROJECTS_CACHE).then(async (cache) => {
+                const cached = await cache.match(event.request);
+
+                if (cached) {
+                    // Check if cache is still fresh (15 min)
+                    const cachedDate = cached.headers.get('sw-cached-at');
+                    if (cachedDate) {
+                        const age = Date.now() - parseInt(cachedDate);
+                        if (age < PROJECTS_CACHE_DURATION) {
+                            console.log('[SW] Projects API from cache (age: ' + Math.round(age / 1000) + 's)');
+                            return cached;
+                        }
+                    }
+                }
+
+                // Fetch fresh and cache
+                console.log('[SW] Fetching fresh projects API');
+                return fetch(event.request).then((response) => {
+                    if (response.ok) {
+                        // Clone and add timestamp header
+                        const headers = new Headers(response.headers);
+                        headers.set('sw-cached-at', Date.now().toString());
+                        const cachedResponse = new Response(response.clone().body, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            headers: headers
+                        });
+                        cache.put(event.request, cachedResponse);
+                    }
                     return response;
-                })
-                .catch(() => {
-                    return caches.match(event.request);
-                })
+                }).catch(() => cached || new Response('{}'));
+            })
         );
         return;
     }
 
-    // Static assets (JS, CSS, images): Cache first
-    if (url.pathname.match(/\.(js|css|svg|png|jpg|jpeg|gif|webp|woff2?)$/)) {
-        event.respondWith(
-            caches.match(event.request)
-                .then((cached) => {
-                    if (cached) return cached;
+    // === EXTERNAL REQUESTS ===
+    // Let these pass through (fonts, CDN, etc.)
+    if (!url.origin.includes(self.location.origin)) {
+        return;
+    }
 
-                    return fetch(event.request).then((response) => {
+    // === ALL INTERNAL REQUESTS ===
+    // Cache first for everything! (our files never change between deploys)
+    event.respondWith(
+        caches.match(event.request)
+            .then((cached) => {
+                if (cached) {
+                    console.log('[SW] Cache hit:', url.pathname);
+                    return cached;
+                }
+
+                // Not in precache - fetch and cache for next time
+                console.log('[SW] Cache miss, fetching:', url.pathname);
+                return fetch(event.request).then((response) => {
+                    if (response.ok) {
                         const clone = response.clone();
                         caches.open(CACHE_NAME).then((cache) => {
                             cache.put(event.request, clone);
                         });
-                        return response;
-                    });
-                })
-        );
-        return;
-    }
-
-    // JSON data: Network first, cache fallback
-    if (url.pathname.endsWith('.json')) {
-        event.respondWith(
-            fetch(event.request)
-                .then((response) => {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, clone);
-                    });
+                    }
                     return response;
-                })
-                .catch(() => {
-                    return caches.match(event.request);
-                })
-        );
-        return;
-    }
-
-    // Default: Network first
-    event.respondWith(
-        fetch(event.request)
-            .catch(() => caches.match(event.request))
+                });
+            })
     );
+});
+
+
+// === MESSAGE HANDLER ===
+// Listen for "update" message to force refresh
+self.addEventListener('message', (event) => {
+    if (event.data === 'skipWaiting') {
+        self.skipWaiting();
+    }
+    if (event.data === 'clearCache') {
+        caches.keys().then((names) => {
+            names.forEach((name) => caches.delete(name));
+        });
+    }
 });
