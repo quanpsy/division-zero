@@ -43,6 +43,9 @@ function renderNavigation(activePage = 'home') {
                          class="logo-nav">
                 </a>
                 
+                <!-- INVISIBLE SCROLL-TO-TOP TOUCH AREA (Mobile only) -->
+                <div class="mobile-scroll-top" id="mobile-scroll-top" aria-label="Scroll to top"></div>
+                
                 <!-- NAVIGATION LINKS -->
                 <div class="nav-links" id="nav-links">
                     ${CONFIG.NAV_LINKS.map(link => `
@@ -89,6 +92,7 @@ function renderNavigation(activePage = 'home') {
 function initMobileMenu() {
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
+    const mobileScrollTop = document.getElementById('mobile-scroll-top');
 
     if (!hamburger || !navLinks) return;
 
@@ -120,6 +124,17 @@ function initMobileMenu() {
             document.body.classList.remove('menu-open');
         }
     });
+
+    // Mobile scroll-to-top on invisible header touch area
+    if (mobileScrollTop) {
+        mobileScrollTop.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Reset scroll position for current page only
+            if (window.Router && window.Router.currentPage) {
+                window.Router.scrollPositions[window.Router.currentPage] = 0;
+            }
+        });
+    }
 }
 
 

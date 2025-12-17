@@ -24,6 +24,7 @@ const Router = {
 
     currentPage: null,
     navRendered: false,
+    scrollPositions: {},  // Remember scroll position per page
 
     init() {
         // Render nav and footer FIRST (only once)
@@ -77,7 +78,12 @@ const Router = {
     },
 
     navigate(page) {
-        if (page === this.currentPage) return;
+        // If clicking same page, smooth scroll to top instead
+        if (page === this.currentPage) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            this.scrollPositions[page] = 0;  // Reset saved position
+            return;
+        }
 
         // Update URL without reload
         const url = page === 'home' ? '/' : '/' + page;
@@ -94,6 +100,11 @@ const Router = {
     },
 
     showPage(page) {
+        // Save scroll position of current page before leaving
+        if (this.currentPage) {
+            this.scrollPositions[this.currentPage] = window.scrollY;
+        }
+
         // Hide all pages
         document.querySelectorAll('.spa-page').forEach(p => {
             p.classList.remove('active');
@@ -113,8 +124,9 @@ const Router = {
         // Update document title
         this.updateTitle(page);
 
-        // Scroll to top
-        window.scrollTo(0, 0);
+        // Restore scroll position or go to top (INSTANT - no animation)
+        const savedScroll = this.scrollPositions[page] || 0;
+        window.scrollTo({ top: savedScroll, behavior: 'instant' });
 
         // Run page-specific init if needed
         this.initPage(page);
