@@ -269,6 +269,11 @@ async function build() {
     fs.copyFileSync('sw.js', 'dist/sw.js');
     // Note: favicon.svg removed - using /assets/images/white-logo.svg instead
 
+    // === COPY VERCEL CONFIG (for SPA routing) ===
+    if (fs.existsSync('vercel.json')) {
+        fs.copyFileSync('vercel.json', 'dist/vercel.json');
+    }
+
     // === COPY ASSETS ===
     console.log('📁 Copying assets...');
     copyDir('assets', 'dist/assets');
