@@ -177,6 +177,9 @@ ${head}
 
     <!-- SPA Page Styles -->
     <style>
+        /* Hide body until router shows correct page - prevents flash */
+        body { opacity: 0; }
+        body.ready { opacity: 1; transition: opacity 0.15s ease; }
         .spa-page { display: none; }
         .spa-page.active { display: block; }
     </style>

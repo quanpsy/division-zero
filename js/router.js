@@ -131,6 +131,9 @@ const Router = {
         // Run page-specific init if needed
         this.initPage(page);
 
+        // Reveal body (for smooth first load - see esbuild SPA styles)
+        document.body.classList.add('ready');
+
         this.currentPage = page;
         console.log('[Router] Navigated to:', page);
     },

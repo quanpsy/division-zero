@@ -38,6 +38,44 @@ async function initProjectsPage() {
     initSearch();
     initFilters();
     initCarousels();
+
+    // Initialize scroll-triggered animations for carousels (like home page)
+    initProjectsScrollAnimations();
+}
+
+
+/**
+ * Initialize scroll-triggered fade-in animations for project carousels
+ * Mirrors the home page behavior for smooth, progressive reveal
+ */
+function initProjectsScrollAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    // Animate each carousel category
+    document.querySelectorAll('#page-projects .project-category').forEach(category => {
+        category.style.opacity = '0';
+        category.style.transform = 'translateY(20px)';
+        category.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(category);
+    });
+
+    // Immediately show categories already in viewport
+    setTimeout(() => {
+        document.querySelectorAll('#page-projects .project-category').forEach(category => {
+            const rect = category.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                category.style.opacity = '1';
+                category.style.transform = 'translateY(0)';
+            }
+        });
+    }, 100);
 }
 
 

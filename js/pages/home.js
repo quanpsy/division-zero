@@ -48,8 +48,13 @@ function initHomePage() {
 /**
  * Initialize scroll-triggered animations
  * Fades in sections as they enter viewport
+ * SCOPED: Only applies to the currently visible/active page
  */
 function initScrollAnimations() {
+    // Get the currently active SPA page
+    const activePage = document.querySelector('.spa-page.active') || document.getElementById('page-home');
+    if (!activePage) return;
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -64,18 +69,17 @@ function initScrollAnimations() {
         });
     }, observerOptions);
 
-    // Observe all sections
-    document.querySelectorAll('.section').forEach(section => {
+    // Only observe sections in the active page
+    activePage.querySelectorAll('.section').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(30px)';
         section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         observer.observe(section);
     });
 
-    // MOBILE FIX: Immediately check sections visible in viewport
-    // Longer delay to ensure dynamic content (tools, dictionary) has loaded
+    // Immediately check sections visible in viewport
     setTimeout(() => {
-        document.querySelectorAll('.section').forEach(section => {
+        activePage.querySelectorAll('.section').forEach(section => {
             const rect = section.getBoundingClientRect();
             const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
             if (inViewport) {
@@ -83,7 +87,7 @@ function initScrollAnimations() {
                 section.style.transform = 'translateY(0)';
             }
         });
-    }, 300);
+    }, 100);
 }
 
 
