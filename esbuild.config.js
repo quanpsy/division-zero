@@ -177,11 +177,47 @@ ${head}
 
     <!-- SPA Page Styles -->
     <style>
-        /* Hide body until router shows correct page - prevents flash */
+        /* Hide body until router is ready - prevents flash */
         body { opacity: 0; }
-        body.ready { opacity: 1; transition: opacity 0.15s ease; }
+        body.ready { opacity: 1; transition: opacity 0.2s ease; }
+        
         .spa-page { display: none; }
         .spa-page.active { display: block; }
+        
+        /* Page open animation for non-home pages */
+        @keyframes pageOpen {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Apply animation only to non-home pages when active AND not already animated */
+        #page-projects.active:not(.animated),
+        #page-tools.active:not(.animated),
+        #page-dictionary.active:not(.animated),
+        #page-submit.active:not(.animated) {
+            animation: pageOpen 0.5s ease-out forwards;
+        }
+        
+        /* Min-height for content containers - prevents footer jump during loading */
+        #projects-container,
+        #tools-container,
+        #terms-grid {
+            min-height: 60vh;
+        }
+        
+        @media (max-width: 768px) {
+            #projects-container,
+            #tools-container,
+            #terms-grid {
+                min-height: 50vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -271,11 +307,6 @@ async function build() {
     fs.copyFileSync('manifest.json', 'dist/manifest.json');
     fs.copyFileSync('sw.js', 'dist/sw.js');
     // Note: favicon.svg removed - using /assets/images/white-logo.svg instead
-
-    // === COPY VERCEL CONFIG (for SPA routing) ===
-    if (fs.existsSync('vercel.json')) {
-        fs.copyFileSync('vercel.json', 'dist/vercel.json');
-    }
 
     // === COPY ASSETS ===
     console.log('📁 Copying assets...');

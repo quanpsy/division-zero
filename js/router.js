@@ -116,6 +116,14 @@ const Router = {
         if (targetPage) {
             targetPage.classList.add('active');
             targetPage.style.display = 'block';
+
+            // Mark as animated after animation completes (session memory)
+            // This prevents animation from replaying on subsequent visits
+            if (page !== 'home' && !targetPage.classList.contains('animated')) {
+                setTimeout(() => {
+                    targetPage.classList.add('animated');
+                }, 500); // Match CSS animation duration
+            }
         }
 
         // Update nav active state
@@ -131,7 +139,7 @@ const Router = {
         // Run page-specific init if needed
         this.initPage(page);
 
-        // Reveal body (for smooth first load - see esbuild SPA styles)
+        // Reveal body (hidden by default to prevent flash)
         document.body.classList.add('ready');
 
         this.currentPage = page;

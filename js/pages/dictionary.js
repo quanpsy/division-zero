@@ -31,8 +31,6 @@ async function initDictionaryPage() {
     }
     dictionaryPageInitialized = true;
 
-    // NOTE: Nav and footer are now rendered by Router
-
     // Load and render terms
     await loadAndRenderTerms();
 
@@ -42,20 +40,7 @@ async function initDictionaryPage() {
     // Initialize modal handlers
     initTermModal();
 
-    // Smooth fade-in animation for terms container
-    setTimeout(() => {
-        const termsGrid = document.querySelector('#page-dictionary .terms-grid');
-        if (termsGrid) {
-            termsGrid.style.opacity = '0';
-            termsGrid.style.transform = 'translateY(15px)';
-            termsGrid.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            // Trigger animation
-            requestAnimationFrame(() => {
-                termsGrid.style.opacity = '1';
-                termsGrid.style.transform = 'translateY(0)';
-            });
-        }
-    }, 50);
+    // Animation handled by CSS (see esbuild template pageOpen keyframe)
 }
 
 
