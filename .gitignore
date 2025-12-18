@@ -1,3 +1,16 @@
 # Environment variables
 .env
 .env.local
+
+# Chat logs (contain sensitive keys - keep locally for training data)
+full chat.md
+discussino with claude opus 4.5 (antigravity).md
+
+# Node modules
+node_modules/
+
+# Diagnostics
+Antigravity-diagnostics.txt
+
+# HAR files (may contain session data)
+HAR/
