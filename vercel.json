@@ -1,29 +1,12 @@
 {
   "outputDirectory": "dist",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/projects",
-      "destination": "/index.html"
+      "handle": "filesystem"
     },
     {
-      "source": "/tools",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/dictionary",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/submit",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/home",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/((?!assets|data|sw.js|manifest.json|.*\\..*).*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ],
   "headers": [
@@ -69,33 +52,6 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=1296000"
-        }
-      ]
-    },
-    {
-      "source": "/tools.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=1296000"
-        }
-      ]
-    },
-    {
-      "source": "/dictionary.html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=1296000"
-        }
-      ]
-    },
-    {
-      "source": "/(.*).html",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=300"
         }
       ]
     },
