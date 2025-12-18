@@ -71,6 +71,19 @@ function initScrollAnimations() {
         section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
         observer.observe(section);
     });
+
+    // MOBILE FIX: Immediately check sections visible in viewport
+    // This ensures sections don't stay hidden if already in view
+    setTimeout(() => {
+        document.querySelectorAll('.section').forEach(section => {
+            const rect = section.getBoundingClientRect();
+            const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+            if (inViewport) {
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0)';
+            }
+        });
+    }, 100);
 }
 
 
