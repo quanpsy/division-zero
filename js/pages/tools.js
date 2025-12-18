@@ -30,6 +30,21 @@ async function initToolsPage() {
 
     // Load and render tools
     await loadAndRenderTools();
+
+    // MOBILE FIX: Trigger scroll animation for tools section
+    // Since tools content loads async, we need to manually trigger visibility
+    setTimeout(() => {
+        const toolsSection = document.querySelector('#page-tools .section');
+        if (toolsSection) {
+            const rect = toolsSection.getBoundingClientRect();
+            const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
+            if (inViewport) {
+                toolsSection.style.opacity = '1';
+                toolsSection.style.transform = 'translateY(0)';
+                toolsSection.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            }
+        }
+    }, 150);
 }
 
 

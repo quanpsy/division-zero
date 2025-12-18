@@ -64,8 +64,8 @@ function initScrollAnimations() {
         });
     }, observerOptions);
 
-    // Observe sections (skip .no-animate to not break other pages like tools)
-    document.querySelectorAll('.section:not(.no-animate)').forEach(section => {
+    // Observe all sections
+    document.querySelectorAll('.section').forEach(section => {
         section.style.opacity = '0';
         section.style.transform = 'translateY(30px)';
         section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
@@ -73,8 +73,9 @@ function initScrollAnimations() {
     });
 
     // MOBILE FIX: Immediately check sections visible in viewport
+    // Longer delay to ensure dynamic content (tools, dictionary) has loaded
     setTimeout(() => {
-        document.querySelectorAll('.section:not(.no-animate)').forEach(section => {
+        document.querySelectorAll('.section').forEach(section => {
             const rect = section.getBoundingClientRect();
             const inViewport = rect.top < window.innerHeight && rect.bottom > 0;
             if (inViewport) {
@@ -82,7 +83,7 @@ function initScrollAnimations() {
                 section.style.transform = 'translateY(0)';
             }
         });
-    }, 100);
+    }, 300);
 }
 
 
