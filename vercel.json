@@ -2,7 +2,27 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
-      "source": "/((?!assets|data|.*\\..*).*)",
+      "source": "/projects",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tools",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/dictionary",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/submit",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/home",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/((?!assets|data|sw.js|manifest.json|.*\\..*).*)",
       "destination": "/index.html"
     }
   ],
