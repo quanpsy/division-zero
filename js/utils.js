@@ -244,6 +244,20 @@ async function loadJSON(url) {
 }
 
 
+/**
+ * Load site data from combined data.json
+ * Returns a specific section (dictionary, icons, tools)
+ * 
+ * @param {string} section - Section to return: 'dictionary', 'icons', or 'tools'
+ * @returns {Promise<object>}
+ */
+async function loadSiteData(section) {
+    const data = await loadJSON('data/data.json');
+    if (!data) return null;
+    return data[section] || null;
+}
+
+
 // ============================================
 // ANIMATION HELPER FUNCTIONS
 // ============================================
@@ -383,6 +397,7 @@ window.utils = {
     debounce,
     throttle,
     loadJSON,
+    loadSiteData,
     scrollToElement,
     fadeIn,
     fadeOut,

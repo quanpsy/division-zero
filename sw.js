@@ -10,7 +10,7 @@
    
    ============================================ */
 
-const CACHE_VERSION = '2.3';
+const CACHE_VERSION = '2.4';
 const CACHE_NAME = `divisionzero-${CACHE_VERSION}`;
 const API_CACHE = 'divisionzero-api';
 const API_CACHE_DURATION = 15 * 60 * 1000;
@@ -64,6 +64,12 @@ self.addEventListener('fetch', (event) => {
     // === SPA NAVIGATION ===
     if (event.request.mode === 'navigate') {
         event.respondWith(handleNavigation(event.request));
+        return;
+    }
+
+    // === PROJECTS.JSON (20-min cache) ===
+    if (url.pathname.includes('projects.json')) {
+        event.respondWith(handleProjectsData(event.request));
         return;
     }
 
@@ -121,6 +127,43 @@ async function handleStatic(request) {
         return response;
     } catch (err) {
         return new Response('Not found', { status: 404 });
+    }
+}
+
+
+// Handle projects.json with 20-min cache (syncs every 60 min)
+const PROJECTS_CACHE_DURATION = 20 * 60 * 1000; // 20 minutes
+
+async function handleProjectsData(request) {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(request);
+
+    if (cached) {
+        const cachedAt = cached.headers.get('sw-cached-at');
+        if (cachedAt && (Date.now() - parseInt(cachedAt)) < PROJECTS_CACHE_DURATION) {
+            console.log('[SW] projects.json from cache (20-min)');
+            return cached;
+        }
+        console.log('[SW] projects.json cache expired, refreshing...');
+    }
+
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            const headers = new Headers(response.headers);
+            headers.set('sw-cached-at', Date.now().toString());
+            const toCache = new Response(response.clone().body, {
+                status: response.status,
+                statusText: response.statusText,
+                headers
+            });
+            cache.put(request, toCache);
+            console.log('[SW] projects.json cached for 20-min');
+        }
+        return response;
+    } catch (err) {
+        // Return stale cache if network fails
+        return cached || new Response('[]', { status: 503 });
     }
 }
 

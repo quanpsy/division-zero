@@ -28,8 +28,8 @@ async function renderTermRows() {
     const container = document.getElementById('term-scroll-container');
     if (!container) return;
 
-    // Load dictionary data
-    const data = await utils.loadJSON('data/dictionary.json');
+    // Load dictionary data from combined data.json
+    const data = await utils.loadSiteData('dictionary');
     if (!data) return;
 
     // Flatten all terms into single array
@@ -95,8 +95,8 @@ async function renderLogoLoop() {
     const track = document.getElementById('logo-scroll-track');
     if (!track) return;
 
-    // Load icons data
-    const data = await utils.loadJSON('data/icons.json');
+    // Load icons data from combined data.json
+    const data = await utils.loadSiteData('icons');
     if (!data) return;
 
     // Combine tools and stacks

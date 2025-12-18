@@ -40,8 +40,8 @@ async function loadAndRenderTools() {
     const container = document.getElementById('tools-container');
     if (!container) return;
 
-    // Load data from JSON
-    const toolsData = await utils.loadJSON('data/tools.json');
+    // Load data from combined data.json
+    const toolsData = await utils.loadSiteData('tools');
 
     if (!toolsData) {
         container.innerHTML = `

@@ -141,8 +141,8 @@ function buildSpaHtml() {
     if (!head.includes('rel="manifest"')) {
         head = head.replace('</title>', `</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- Favicon (using white-logo.svg to save edge request) -->
+    <link rel="icon" type="image/svg+xml" href="/assets/images/white-logo.svg">
 
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
@@ -267,9 +267,7 @@ async function build() {
     console.log('📱 Adding PWA files...');
     fs.copyFileSync('manifest.json', 'dist/manifest.json');
     fs.copyFileSync('sw.js', 'dist/sw.js');
-    if (fs.existsSync('favicon.svg')) {
-        fs.copyFileSync('favicon.svg', 'dist/favicon.svg');
-    }
+    // Note: favicon.svg removed - using /assets/images/white-logo.svg instead
 
     // === COPY ASSETS ===
     console.log('📁 Copying assets...');

@@ -51,8 +51,8 @@ async function loadAndRenderTerms() {
     const container = document.getElementById('terms-container');
     if (!container) return;
 
-    // Load data from JSON
-    dictionaryData = await utils.loadJSON('data/dictionary.json');
+    // Load data from combined data.json
+    dictionaryData = await utils.loadSiteData('dictionary');
 
     if (!dictionaryData) {
         container.innerHTML = `
