@@ -1,29 +1,11 @@
 {
   "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
-      "source": "/projects",
-      "destination": "/"
-    },
-    {
-      "source": "/tools",
-      "destination": "/"
-    },
-    {
-      "source": "/dictionary",
-      "destination": "/"
-    },
-    {
-      "source": "/submit",
-      "destination": "/"
-    },
-    {
-      "source": "/home",
-      "destination": "/"
-    },
-    {
-      "source": "/:path*",
-      "destination": "/"
+      "source": "/((?!assets|data|sw.js|manifest.json|app.min.js|styles.min.css).*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
