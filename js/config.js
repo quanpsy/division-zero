@@ -30,7 +30,7 @@ const CONFIG = {
     // ----------------------------------------
     // Change these when you have real URLs
     // ========================================
-    DISCORD_URL: 'https://discord.gg/SXJS4S7jUE',
+    DISCORD_URL: 'https://discord.gg/aRTdyyE277',
     TWITTER_URL: 'https://twitter.com/divisionzerodev',
     REDDIT_URL: 'https://reddit.com/r/divisionzero',
     GITHUB_URL: 'https://github.com/divisionzero',
