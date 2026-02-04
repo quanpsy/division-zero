@@ -406,6 +406,13 @@ function initProjectCardButtons() {
                 let savedProjects = JSON.parse(localStorage.getItem('savedProjects') || '[]');
                 savedProjects = savedProjects.filter(id => id !== projectId);
                 localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
+
+                // Sync ALL cards with this projectId
+                document.querySelectorAll(`.stat-save[data-project-id="${projectId}"]`).forEach(otherBtn => {
+                    otherBtn.classList.remove('saved');
+                    otherBtn.querySelector('svg').setAttribute('fill', 'none');
+                    otherBtn.title = 'Bookmark';
+                });
             } else {
                 // Add to saved
                 btn.classList.add('saved');
@@ -419,6 +426,13 @@ function initProjectCardButtons() {
                     savedProjects.push(projectId);
                 }
                 localStorage.setItem('savedProjects', JSON.stringify(savedProjects));
+
+                // Sync ALL cards with this projectId
+                document.querySelectorAll(`.stat-save[data-project-id="${projectId}"]`).forEach(otherBtn => {
+                    otherBtn.classList.add('saved');
+                    otherBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+                    otherBtn.title = 'Remove Bookmark';
+                });
             }
         });
     });
@@ -461,6 +475,8 @@ function addToSavedCarousel(card, projectId) {
         if (cloneSaveBtn) {
             cloneSaveBtn.classList.add('saved');
             cloneSaveBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+            // Remove initialized flag so the clone gets its own event listener
+            delete cloneSaveBtn.dataset.initialized;
         }
 
         track.appendChild(clone);
